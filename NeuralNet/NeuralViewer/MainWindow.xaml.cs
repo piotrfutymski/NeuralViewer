@@ -21,10 +21,12 @@ namespace NeuralViewer
     /// </summary>
     public partial class MainWindow : Window
     {
+        ScreenDisplayer mScreenDisplayer;
+
         public MainWindow()
         {
             InitializeComponent();
-            
+            mScreenDisplayer = new ScreenDisplayer(n_screen);
         }
     }
 }
