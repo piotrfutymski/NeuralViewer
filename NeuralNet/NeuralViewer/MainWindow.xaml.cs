@@ -24,6 +24,7 @@ namespace NeuralViewer
         public MainWindow()
         {
             InitializeComponent();
+            
         }
     }
 }

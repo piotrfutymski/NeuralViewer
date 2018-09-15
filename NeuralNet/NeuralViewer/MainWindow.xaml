@@ -7,11 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="1132">
     <Grid>
-        <Canvas Height="600" Width="370" Margin="100,34,654,35" 
-                Background="Black" >
-            <Border BorderBrush="DarkBlue" BorderThickness="2" Height="600" Width="370" >
-
-
+        <Canvas x:Name="n_screen" Height="600" Width="600" Margin="100,34,654,35" 
+                Background="Black">
+            <Border BorderBrush="DarkBlue" BorderThickness="2" Height="600" Width="600" >
             </Border>
         </Canvas>
     </Grid>
