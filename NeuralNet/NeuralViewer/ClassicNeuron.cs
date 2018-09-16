@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace NeuralViewer
 {
-    class ClassicNeuron:NeuronRepresentation
+    class ClassicNeuron:OneNumberRepresentation
     {
         public override double Value
         {
@@ -26,7 +26,7 @@ namespace NeuralViewer
             get { return NeuronShape; }
         }
 
-        public System.Windows.Visibility Visibility
+        public Visibility Visibility
         {
             get { return NeuronShape.Visibility; }
             set { NeuronShape.Visibility = value; }
@@ -42,10 +42,10 @@ namespace NeuralViewer
 
             NeuronShape.Stroke = Brushes.AliceBlue;
 
-            SetRadius(32);
+            SetSize(32);
         }
 
-        public void SetRadius(double radius)
+        public override void SetSize(double radius)
         {
             NeuronShape.Height = radius;
             NeuronShape.Width = radius;

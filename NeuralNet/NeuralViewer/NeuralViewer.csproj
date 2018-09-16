@@ -55,9 +55,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ClassicLayer.cs" />
-    <Compile Include="LayerRepresentation.cs" />
+    <Compile Include="NumbersRepresentation.cs" />
     <Compile Include="ClassicNeuron.cs" />
-    <Compile Include="NeuronRepresentation.cs" />
+    <Compile Include="OneNumberRepresentation.cs" />
     <Compile Include="ScreenDisplayer.cs" />
     <Compile Include="ScreenDisplayerSettings.cs" />
     <Page Include="MainWindow.xaml">

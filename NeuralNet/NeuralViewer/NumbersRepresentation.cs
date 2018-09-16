@@ -7,20 +7,21 @@ using System.Windows.Controls;
 
 namespace NeuralViewer
 {
-    abstract class LayerRepresentation
+    abstract class NumbersRepresentation
     {
 
         protected Canvas layerScreen;
-        protected List<NeuronRepresentation> neurons;
+        protected List<OneNumberRepresentation> neurons;
 
-        public LayerRepresentation(Canvas screen)
+        public NumbersRepresentation(Canvas screen)
         {
             layerScreen = screen;
             neurons = null;
-            layerScreen.MouseWheel += LayerScreen_MouseWheel; ;
+            layerScreen.MouseWheel += LayerScreen_MouseWheel;
         }
 
         protected abstract void LayerScreen_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e);
+        public abstract void Redraw();
 
         public void SetNeurons(int [] v, int beg)
         {
@@ -37,11 +38,6 @@ namespace NeuralViewer
         public void SetNeuron(int v, int num)
         {
             SetNeurons(new int[] { v }, num);
-        }
-
-        abstract public void Redraw();
-
-     
-        
+        }       
     }
 }

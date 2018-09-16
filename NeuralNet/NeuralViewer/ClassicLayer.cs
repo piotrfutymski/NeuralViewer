@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows;
+using System.Windows.Shapes;
 
 namespace NeuralViewer
 {
-    class ClassicLayer : LayerRepresentation
+    class ClassicLayer : NumbersRepresentation
     {
         int neuronsOnScreen;
         int firstNeuronOnScreen;
@@ -19,33 +21,8 @@ namespace NeuralViewer
 
         public ClassicLayer(Canvas screen) : base(screen)
         {
-            neurons = new List<NeuronRepresentation>();
-
+            neurons = new List<OneNumberRepresentation>();
             SetDisplayOptions(8, 0);
-        }
-
-        public override void Redraw()
-        {
-            double horizontalPos;
-            double firstNeuronPos = CountFirstNeuronPos();
-            double neuronSize = CountNeuronSize();
-
-            for (int i = 0; i < neurons.Count; i++)
-            {
-                layerScreen.Children.Remove(neurons[i].Representation);
-            }
-
-            for (int i = 0; i < neuronsOnScreen; i++)
-            {
-                if (i == neurons.Count)
-                    break;
-
-                horizontalPos = firstNeuronPos + i * (spaces + neuronSize);
-                Canvas.SetLeft(neurons[i + firstNeuronOnScreen].Representation, horizontalPos);
-                layerScreen.Children.Add(neurons[i + firstNeuronOnScreen].Representation);
-                Canvas.SetTop(neurons[i + firstNeuronOnScreen].Representation, (layerScreen.Height - neuronSize) / 2);              
-                (neurons[i + firstNeuronOnScreen] as ClassicNeuron).SetRadius(neuronSize);
-            }
         }
 
         private void SetDisplayOptions(int n, int f)
@@ -82,20 +59,58 @@ namespace NeuralViewer
             Border b = new Border();
             b.Height = layerScreen.Height;
             b.Width = layerScreen.Width;
-            b.BorderThickness = new System.Windows.Thickness(2);
+            b.BorderThickness = new Thickness(2);
             var br = color;
             b.BorderBrush = br;
             layerScreen.Children.Add(b);
 
         }
 
+        private void DrawBox()
+        {
+            Rectangle b = new Rectangle();
+            b.Height = layerScreen.Height;
+            b.Width = layerScreen.Width;
+
+            Canvas.SetZIndex(b, -10);
+            b.Fill = Brushes.Black;
+            layerScreen.Children.Add(b);
+
+        }
+
         protected override void LayerScreen_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
         {
-            if(layerScreen.IsMouseOver)
+            if(layerScreen.Children[1].IsMouseOver)
             {
                 if(neuronsOnScreen + e.Delta/50 > 0)
                 SetDisplayOptions(neuronsOnScreen + e.Delta / 50, firstNeuronOnScreen);
                 Redraw();
+            }
+        }
+
+        public override void Redraw()
+        {
+            double horizontalPos;
+            double firstNeuronPos = CountFirstNeuronPos();
+            double neuronSize = CountNeuronSize();
+
+            for (int i = 0; i < neurons.Count; i++)
+            {
+                layerScreen.Children.Remove(neurons[i].Representation);
+            }
+
+            for (int i = 0; i < neuronsOnScreen; i++)
+            {
+                if (i == neurons.Count)
+                    break;
+
+                horizontalPos = firstNeuronPos + i * (spaces + neuronSize);
+
+                Canvas.SetLeft(neurons[i + firstNeuronOnScreen].Representation, horizontalPos);
+                Canvas.SetTop(neurons[i + firstNeuronOnScreen].Representation, (layerScreen.Height - neuronSize) / 2);
+
+                layerScreen.Children.Add(neurons[i + firstNeuronOnScreen].Representation);
+                neurons[i + firstNeuronOnScreen].SetSize(neuronSize);
             }
         }
 
@@ -111,10 +126,12 @@ namespace NeuralViewer
 
         public ClassicLayer(Canvas screen, int num) : base(screen)
         {
-            neurons = new List<NeuronRepresentation>();
+            neurons = new List<OneNumberRepresentation>();
             CreateTestNeurons(num);
-            SetDisplayOptions(16, 0);
             DrawBorder(Brushes.DarkCyan);
+            DrawBox();
+
+            SetDisplayOptions(16, 0);
         }
     }
 }

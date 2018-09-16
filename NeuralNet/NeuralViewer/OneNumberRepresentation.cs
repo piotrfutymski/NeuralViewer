@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace NeuralViewer
 {
-    abstract class NeuronRepresentation
+    abstract class OneNumberRepresentation
     {
         protected double num;
 
@@ -21,5 +21,7 @@ namespace NeuralViewer
         {
             get;
         }
-    }
+
+        public abstract void SetSize(double x);
+    };
 }
