@@ -15,7 +15,7 @@ namespace NeuralViewer
     class ScreenDisplayer
     {
         Canvas mainScreen;
-        List<TestLayerRepresentation> testLayers;
+        List<ClassicLayer> testLayers;
 
         public ScreenDisplayer(Canvas screen)
         {
@@ -23,7 +23,7 @@ namespace NeuralViewer
 
             //************* For test puproses we are creating 5 testLayers *************************//
 
-            testLayers = new List<TestLayerRepresentation>();
+            testLayers = new List<ClassicLayer>();
 
             for (int i = 0; i < 5; i++)
             {
@@ -34,7 +34,7 @@ namespace NeuralViewer
                 Canvas.SetTop(lscreen, i * lscreen.Height);
                 mainScreen.Children.Add(lscreen);
 
-                testLayers.Add(new TestLayerRepresentation(lscreen));
+                testLayers.Add(new ClassicLayer(lscreen, 8 + i * 8));
             }
         }
 

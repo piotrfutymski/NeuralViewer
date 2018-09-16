@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
 using System.Windows.Media;
+using System.Windows;
 
 namespace NeuralViewer
 {
@@ -12,12 +13,17 @@ namespace NeuralViewer
     {
         public override double Value
         {
-            get { return Value; }
+            get { return num; }
             set
             {
-                Value = value;
+                num = value;
                 NeuronShape.Fill = new SolidColorBrush(Color.FromArgb(255, (byte)(Value * 255), (byte)(Value * 255), (byte)(Value * 255)));
             }
+        }
+
+        public override UIElement Representation 
+        {
+            get { return NeuronShape; }
         }
 
         public Ellipse NeuronShape { get; private set; }
@@ -29,7 +35,6 @@ namespace NeuralViewer
             Value = r.NextDouble();
 
             NeuronShape.Stroke = Brushes.AliceBlue;
-            NeuronShape.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
 
             SetRadius(32);
         }

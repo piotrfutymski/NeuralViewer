@@ -19,6 +19,23 @@ namespace NeuralViewer
             neurons = null;
         }
 
+        public void SetNeurons(int [] v, int beg)
+        {
+            if (v.Length + beg > neurons.Count)
+                throw new ArgumentException();
+
+            for (int i = beg; i < v.Length; i++)
+            {
+                neurons[i].Value = v[i - beg];
+            }
+            Redraw();
+        }
+
+        public void SetNeuron(int v, int num)
+        {
+            SetNeurons(new int[] { v }, num);
+        }
+
         abstract public void Redraw();
         
     }

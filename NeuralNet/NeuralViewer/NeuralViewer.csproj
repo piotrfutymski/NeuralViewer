@@ -54,10 +54,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ClassicLayer.cs" />
     <Compile Include="LayerRepresentation.cs" />
+    <Compile Include="ClassicNeuron.cs" />
+    <Compile Include="NeuronRepresentation.cs" />
     <Compile Include="ScreenDisplayer.cs" />
     <Compile Include="ScreenDisplayerSettings.cs" />
-    <Compile Include="TestLayerRepresentation.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
