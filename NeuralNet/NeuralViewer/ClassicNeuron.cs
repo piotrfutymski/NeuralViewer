@@ -26,6 +26,12 @@ namespace NeuralViewer
             get { return NeuronShape; }
         }
 
+        public System.Windows.Visibility Visibility
+        {
+            get { return NeuronShape.Visibility; }
+            set { NeuronShape.Visibility = value; }
+        }
+
         public Ellipse NeuronShape { get; private set; }
 
         public ClassicNeuron()       // TODO: Create more useful constructor/s whith NeuralNet Lib

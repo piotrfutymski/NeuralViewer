@@ -17,7 +17,10 @@ namespace NeuralViewer
         {
             layerScreen = screen;
             neurons = null;
+            layerScreen.MouseWheel += LayerScreen_MouseWheel; ;
         }
+
+        protected abstract void LayerScreen_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e);
 
         public void SetNeurons(int [] v, int beg)
         {
@@ -37,6 +40,8 @@ namespace NeuralViewer
         }
 
         abstract public void Redraw();
+
+     
         
     }
 }

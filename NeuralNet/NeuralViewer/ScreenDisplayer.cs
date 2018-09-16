@@ -34,7 +34,7 @@ namespace NeuralViewer
                 Canvas.SetTop(lscreen, i * lscreen.Height);
                 mainScreen.Children.Add(lscreen);
 
-                testLayers.Add(new ClassicLayer(lscreen, 8 + i * 8));
+                testLayers.Add(new ClassicLayer(lscreen, 8 + i * 20));
             }
         }
 

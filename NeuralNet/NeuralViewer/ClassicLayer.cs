@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace NeuralViewer
@@ -14,7 +15,7 @@ namespace NeuralViewer
         int firstNeuronOnScreen;
 
         double spaces = 5;
-        double defaultSize = 32;
+        double defaultSize = 50;
 
         public ClassicLayer(Canvas screen) : base(screen)
         {
@@ -29,12 +30,20 @@ namespace NeuralViewer
             double firstNeuronPos = CountFirstNeuronPos();
             double neuronSize = CountNeuronSize();
 
+            for (int i = 0; i < neurons.Count; i++)
+            {
+                layerScreen.Children.Remove(neurons[i].Representation);
+            }
+
             for (int i = 0; i < neuronsOnScreen; i++)
             {
+                if (i == neurons.Count)
+                    break;
+
                 horizontalPos = firstNeuronPos + i * (spaces + neuronSize);
                 Canvas.SetLeft(neurons[i + firstNeuronOnScreen].Representation, horizontalPos);
-                Canvas.SetTop(neurons[i + firstNeuronOnScreen].Representation, (layerScreen.Height - neuronSize) / 2);
                 layerScreen.Children.Add(neurons[i + firstNeuronOnScreen].Representation);
+                Canvas.SetTop(neurons[i + firstNeuronOnScreen].Representation, (layerScreen.Height - neuronSize) / 2);              
                 (neurons[i + firstNeuronOnScreen] as ClassicNeuron).SetRadius(neuronSize);
             }
         }
@@ -43,6 +52,9 @@ namespace NeuralViewer
         {
             neuronsOnScreen = n;
             firstNeuronOnScreen = f;
+
+            if (neuronsOnScreen > neurons.Count)
+                neuronsOnScreen = neurons.Count;
 
             Redraw();
         }
@@ -77,12 +89,23 @@ namespace NeuralViewer
 
         }
 
+        protected override void LayerScreen_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            if(layerScreen.IsMouseOver)
+            {
+                if(neuronsOnScreen + e.Delta/50 > 0)
+                SetDisplayOptions(neuronsOnScreen + e.Delta / 50, firstNeuronOnScreen);
+                Redraw();
+            }
+        }
+
         //Test only
         private void CreateTestNeurons(int num)
         {
             for (int i = 0; i < num; i++)
             {
                 neurons.Add(new ClassicNeuron());
+              
             }
         }
 
@@ -90,7 +113,7 @@ namespace NeuralViewer
         {
             neurons = new List<NeuronRepresentation>();
             CreateTestNeurons(num);
-            SetDisplayOptions(num, 0);
+            SetDisplayOptions(16, 0);
             DrawBorder(Brushes.DarkCyan);
         }
     }
