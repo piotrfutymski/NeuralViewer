@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace NeuralViewer
 {
-    class NeuronRepresentation
+    abstract class NeuronRepresentation
     {
-        public double Value { get; private set; }
-
-        public NeuronRepresentation()
+        public abstract double Value
         {
-            Random r = new Random((int)DateTime.Now.Ticks);
-            Value = r.NextDouble();
+            get;
+            set;
         }
     }
 }

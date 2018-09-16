@@ -9,19 +9,14 @@ namespace NeuralViewer
 {
     abstract class LayerRepresentation
     {
-        // TODO: Add Neurons to the layer  
 
-        protected double baseHeightOnScreen;
-        protected double baseWidthOnScreen;
         protected Canvas layerScreen;
-
-
+        protected List<NeuronRepresentation> neurons;
 
         public LayerRepresentation(Canvas screen)
         {
-            baseHeightOnScreen = screen.Height;
-            baseWidthOnScreen = screen.Width;
             layerScreen = screen;
+            neurons = null;
         }
 
         abstract public void Redraw();
