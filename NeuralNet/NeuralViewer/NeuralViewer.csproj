@@ -54,12 +54,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ClassicLayer.cs" />
-    <Compile Include="NumbersRepresentation.cs" />
-    <Compile Include="ClassicNeuron.cs" />
-    <Compile Include="OneNumberRepresentation.cs" />
-    <Compile Include="ScreenDisplayer.cs" />
-    <Compile Include="ScreenDisplayerSettings.cs" />
+    <Compile Include="Screen\ClassicLayer.cs" />
+    <Compile Include="Screen\NumbersRepresentation.cs" />
+    <Compile Include="Screen\ClassicNeuron.cs" />
+    <Compile Include="Screen\OneNumberRepresentation.cs" />
+    <Compile Include="Screen\ScreenDisplayer.cs" />
+    <Compile Include="Screen\ScreenDisplayerSettings.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
