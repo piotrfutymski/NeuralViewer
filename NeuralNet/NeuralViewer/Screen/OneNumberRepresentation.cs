@@ -60,7 +60,6 @@ namespace NeuralViewer.Screen
             Random r = new Random((int)DateTime.Now.Ticks);
             NeuronShape =  new T();
             Value = r.NextDouble();
-            ColorType = ColorTypes.WhiteBlack;
 
             NeuronShape.Stroke = Brushes.AliceBlue;
 

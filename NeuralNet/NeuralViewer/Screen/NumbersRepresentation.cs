@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows;
 using System.Windows.Shapes;
 
 namespace NeuralViewer.Screen
@@ -17,13 +20,16 @@ namespace NeuralViewer.Screen
 
         public enum NumberRepresentationSettings
         {
-            Size,
-            Spaces,
+            HSize,                                           //     max height of layer
+            Spaces,                                             
             NeuronsOnScreen,
-            FirstNeuronOnScreen
+            FirstNeuronOnScreen,
+            IsWhiteBlack,
+            RowNumber
         }
 
-        protected abstract void LayerScreen_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e);
+        protected abstract void LayerScreen_MouseWheel(object sender, MouseWheelEventArgs e);
+        protected abstract bool CheckingSettingsValue(NumberRepresentationSettings name, double value);
         public abstract void Redraw();
 
         public NumbersRepresentation(Canvas screen)
@@ -54,27 +60,14 @@ namespace NeuralViewer.Screen
         {
             if(layerSettings.ContainsKey(name))
             {
-                if (name == NumberRepresentationSettings.NeuronsOnScreen && value > neurons.Count)
-                    return;
-                layerSettings[name] = value;
-                Redraw();
+                if(CheckingSettingsValue(name, value))
+                {
+                    layerSettings[name] = value;
+                    Redraw();
+                }
             }             
             else
                 throw new ArgumentException();
-        }
-
-        public void SetAllPossibleSettings(double [] v)
-        {
-            if (v.Length > neurons.Count)
-                throw new ArgumentException();
-
-            var keys = layerSettings.Keys.ToArray();
-
-            for (int i = 0; i < v.Length; i++)
-            {
-                layerSettings[keys[i]] = v[i];
-            }
-            Redraw();
         }
 
         public double GetSetting(NumberRepresentationSettings name)
@@ -86,25 +79,30 @@ namespace NeuralViewer.Screen
             else
                 throw new ArgumentException();
         }
-        /*
-        private bool CheckingSettingsValues(NumberRepresentationSettings name, double value)
+
+        protected void DrawBorder(SolidColorBrush color)
         {
-            switch (name)
-            {
-                case NumberRepresentationSettings.Size:
-                    if()
-                    break;
-                case NumberRepresentationSettings.Spaces:
-                    break;
-                case NumberRepresentationSettings.NeuronsOnScreen:
-                    break;
-                case NumberRepresentationSettings.FirstNeuronOnScreen:
-                    break;
-                default:
-                    break;
-            }
+            Border b = new Border();
+            b.Height = layerScreen.Height;
+            b.Width = layerScreen.Width;
+            b.BorderThickness = new Thickness(2);
+            var br = color;
+            b.BorderBrush = br;
+            layerScreen.Children.Add(b);
+
         }
-        */ //Dokończyć!!!
+
+        protected void DrawBox()
+        {
+            Rectangle b = new Rectangle();
+            b.Height = layerScreen.Height;
+            b.Width = layerScreen.Width;
+
+            Canvas.SetZIndex(b, -10);
+            b.Fill = Brushes.Black;
+            layerScreen.Children.Add(b);
+
+        }
 
     }
 }
