@@ -9,14 +9,14 @@ using System.Windows.Media;
 using System.Windows;
 using System.Windows.Shapes;
 
-namespace NeuralViewer
+namespace NeuralViewer.Screen
 {
-    class ClassicLayer : NumbersRepresentation
+    class ClassicLayer : NumbersRepresentation<Ellipse>
     {
 
         public ClassicLayer(Canvas screen) : base(screen)
         {
-            neurons = new List<OneNumberRepresentation>();
+            neurons = new List<OneNumberRepresentation<Ellipse>>();
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();
 
             layerSettings.Add(NumberRepresentationSettings.FirstNeuronOnScreen, 0);
@@ -126,13 +126,13 @@ namespace NeuralViewer
         {
             for (int i = 0; i < num; i++)
             {
-                neurons.Add(new ClassicNeuron());             
+                neurons.Add(new OneNumberRepresentation<Ellipse>());             
             }
         }
 
         public ClassicLayer(Canvas screen, int num) : base(screen)
         {
-            neurons = new List<OneNumberRepresentation>();
+            neurons = new List<OneNumberRepresentation<Ellipse>>();
             CreateTestNeurons(num);
 
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();

@@ -4,24 +4,73 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Shapes;
+using System.Windows.Media;
 
-namespace NeuralViewer
+namespace NeuralViewer.Screen
 {
-    abstract class OneNumberRepresentation
+    class OneNumberRepresentation<T> where T : Shape, new()
     {
-        protected double num;
-
-        public abstract double Value
+        public enum ColorTypes
         {
-            get;
-            set;
+            GreenRed,
+            WhiteBlack
         }
 
-        public abstract UIElement Representation
+        private double num;
+        private ColorTypes colorType;
+
+        public ColorTypes ColorType
         {
-            get;
+            get { return colorType; }
+            set
+            {
+                colorType = value;
+                Value = num;
+            }
         }
 
-        public abstract void SetSize(double x);
+        public double Value
+        {
+            get { return num; }
+            set
+            {
+                num = value;
+                if(colorType == ColorTypes.WhiteBlack)
+                    Representation.Fill= new SolidColorBrush(Color.FromArgb(255, (byte)(num * 255), (byte)(num * 255), (byte)(num * 255)));
+                else if(colorType == ColorTypes.GreenRed)
+                {
+                    if(num <= 0)
+                        Representation.Fill = new SolidColorBrush(Color.FromArgb(255, 255, (byte)((1d+num) * 255), (byte)((1d + num) * 255) ));
+                    else
+                        Representation.Fill = new SolidColorBrush(Color.FromArgb(255, (byte)((1d - num) * 255), 255, (byte)((1d - num) * 255)));
+                }
+            }
+        }
+
+        public  Shape Representation
+        {
+            get { return NeuronShape; }
+        }
+
+        public T NeuronShape { get; private set; }
+
+        public OneNumberRepresentation()       // TODO: Create more useful constructor/s whith NeuralNet Lib
+        {
+            Random r = new Random((int)DateTime.Now.Ticks);
+            NeuronShape =  new T();
+            Value = r.NextDouble();
+            ColorType = ColorTypes.WhiteBlack;
+
+            NeuronShape.Stroke = Brushes.AliceBlue;
+
+        }
+
+        public void SetSize(double x)
+        {
+            NeuronShape.Height = x;
+            NeuronShape.Width = x;
+        }
+
     };
 }

@@ -56,8 +56,8 @@
     </ApplicationDefinition>
     <Compile Include="Screen\ClassicLayer.cs" />
     <Compile Include="Screen\NumbersRepresentation.cs" />
-    <Compile Include="Screen\ClassicNeuron.cs" />
     <Compile Include="Screen\OneNumberRepresentation.cs" />
+    <Compile Include="Screen\PixelLayer.cs" />
     <Compile Include="Screen\ScreenDisplayer.cs" />
     <Compile Include="Screen\ScreenDisplayerSettings.cs" />
     <Page Include="MainWindow.xaml">

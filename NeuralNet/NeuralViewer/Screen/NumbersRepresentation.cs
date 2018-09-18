@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Shapes;
 
-namespace NeuralViewer
+namespace NeuralViewer.Screen
 {
-    abstract class NumbersRepresentation
+    abstract class NumbersRepresentation<T> where T: Shape, new()
     {
 
         protected Canvas layerScreen;
-        protected List<OneNumberRepresentation> neurons;
+        protected List<OneNumberRepresentation<T>> neurons;
         protected Dictionary<NumberRepresentationSettings, double> layerSettings;
 
         public enum NumberRepresentationSettings
