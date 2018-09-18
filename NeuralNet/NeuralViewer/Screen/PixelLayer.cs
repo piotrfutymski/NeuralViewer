@@ -82,7 +82,9 @@ namespace NeuralViewer.Screen
             switch (name)
             {
                 case NumberRepresentationSettings.HSize:
-                    if (value > layerScreen.Height || value < 0) return false;
+                    if (value > layerScreen.Height || 
+                        (value / GetSetting(NumberRepresentationSettings.RowNumber) * neurons.Count / (int)GetSetting(NumberRepresentationSettings.RowNumber)) > layerScreen.Width || 
+                        value < 0) return false;
                     break;
                 case NumberRepresentationSettings.Spaces:
                     if (value != 0) return false;
@@ -120,7 +122,7 @@ namespace NeuralViewer.Screen
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();
             layerSettings.Add(NumberRepresentationSettings.FirstNeuronOnScreen, 0);
             layerSettings.Add(NumberRepresentationSettings.NeuronsOnScreen, 0);
-            layerSettings.Add(NumberRepresentationSettings.HSize, layerScreen.Height / 2);
+            layerSettings.Add(NumberRepresentationSettings.HSize, layerScreen.Height / 8);
             layerSettings.Add(NumberRepresentationSettings.Spaces, 0);
             layerSettings.Add(NumberRepresentationSettings.IsWhiteBlack, 1);
             layerSettings.Add(NumberRepresentationSettings.RowNumber, 4);

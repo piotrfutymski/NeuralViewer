@@ -43,7 +43,7 @@ namespace NeuralViewer.Screen
             Canvas.SetTop(lss, 4 * lss.Height);
             mainScreen.Children.Add(lss);
 
-            var pL = new PixelLayer(lss, 32);
+            var pL = new PixelLayer(lss, 256);
         }
 
 
