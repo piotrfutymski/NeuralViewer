@@ -11,12 +11,12 @@ using System.Windows.Shapes;
 
 namespace NeuralViewer.Screen
 {
-    class ClassicLayer : NumbersRepresentation<Ellipse>
+    class ClassicLayer : NumbersRepresentation
     {
 
         public ClassicLayer(Canvas screen) : base(screen)
         {
-            neurons = new List<OneNumberRepresentation<Ellipse>>();
+            neurons = new List<OneNumberRepresentation>();
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();
 
             Redraw();
@@ -52,9 +52,9 @@ namespace NeuralViewer.Screen
                 neurons[i + (int)firstNeuronOnScreen].SetSize(neuronSize);
 
                 if (GetSetting(NumberRepresentationSettings.IsWhiteBlack) == 0)
-                    neurons[i + (int)firstNeuronOnScreen].ColorType = OneNumberRepresentation<Ellipse>.ColorTypes.GreenRed;
+                    neurons[i + (int)firstNeuronOnScreen].ColorType = OneNumberRepresentation.ColorTypes.GreenRed;
                 else
-                    neurons[i + (int)firstNeuronOnScreen].ColorType = OneNumberRepresentation<Ellipse>.ColorTypes.WhiteBlack;
+                    neurons[i + (int)firstNeuronOnScreen].ColorType = OneNumberRepresentation.ColorTypes.WhiteBlack;
             }
         }
 
@@ -125,13 +125,13 @@ namespace NeuralViewer.Screen
         {
             for (int i = 0; i < num; i++)
             {
-                neurons.Add(new OneNumberRepresentation<Ellipse>());             
+                neurons.Add(new EllipseNeuron());             
             }
         }
 
         public ClassicLayer(Canvas screen, int num) : base(screen)
         {
-            neurons = new List<OneNumberRepresentation<Ellipse>>();
+            neurons = new List<OneNumberRepresentation>();
             CreateTestNeurons(num);
 
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();

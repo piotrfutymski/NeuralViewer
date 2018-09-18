@@ -11,11 +11,11 @@ using System.Windows.Shapes;
 
 namespace NeuralViewer.Screen
 {
-    abstract class NumbersRepresentation<T> where T: Shape, new()
+    abstract class NumbersRepresentation
     {
 
         protected Canvas layerScreen;
-        protected List<OneNumberRepresentation<T>> neurons;
+        protected List<OneNumberRepresentation> neurons;
         protected Dictionary<NumberRepresentationSettings, double> layerSettings;
 
         public enum NumberRepresentationSettings

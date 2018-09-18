@@ -24,8 +24,7 @@ namespace NeuralViewer.Screen
             //************* For test puproses we are creating 5 testLayers *************************//
 
             testLayers = new List<ClassicLayer>();
-
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 4; i++)
             {
                 Canvas lscreen = new Canvas();
                 lscreen.Height = mainScreen.Height / 5;
@@ -36,6 +35,15 @@ namespace NeuralViewer.Screen
 
                 testLayers.Add(new ClassicLayer(lscreen, 8 + i * 20));
             }
+
+            Canvas lss = new Canvas();
+            lss.Height = mainScreen.Height / 5;
+            lss.Width = mainScreen.Width;
+
+            Canvas.SetTop(lss, 4 * lss.Height);
+            mainScreen.Children.Add(lss);
+
+            var pL = new PixelLayer(lss, 32);
         }
 
 

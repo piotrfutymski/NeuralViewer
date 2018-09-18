@@ -9,14 +9,14 @@ using System.Windows.Media;
 using System.Windows;
 using System.Windows.Shapes;
 
-/*
+
 namespace NeuralViewer.Screen
 {
-    class PixelLayer : NumbersRepresentation<Rectangle>
+    class PixelLayer : NumbersRepresentation
     {
-        public ClassicLayer(Canvas screen) : base(screen)
+        public PixelLayer(Canvas screen) : base(screen)
         {
-            neurons = new List<OneNumberRepresentation<Ellipse>>();
+            neurons = new List<OneNumberRepresentation>();
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();
 
             Redraw();
@@ -24,72 +24,55 @@ namespace NeuralViewer.Screen
 
         public override void Redraw()
         {
-            var neuronsOnScreen = GetSetting(NumberRepresentationSettings.NeuronsOnScreen);
-            var defaultSize = GetSetting(NumberRepresentationSettings.HSize);
-            var spaces = GetSetting(NumberRepresentationSettings.Spaces);
-            var firstNeuronOnScreen = GetSetting(NumberRepresentationSettings.FirstNeuronOnScreen);
 
-            double horizontalPos;
-            double firstNeuronPos = CountFirstNeuronPos();
-            double neuronSize = CountNeuronSize();
+            int NIL = CountNumberInLine();
+            double fn_L = CountFirstNeuronLeftPos();
+            double fn_T = CountFirstNeuronTopPos();
+            double pS = CountPixelSize();
+
 
             for (int i = 0; i < neurons.Count; i++)
             {
-                layerScreen.Children.Remove(neurons[i].Representation);
-            }
 
-            for (int i = 0; i < neuronsOnScreen; i++)
-            {
-                if (i == neurons.Count)
-                    break;
+                Canvas.SetLeft(neurons[i].Representation, fn_L + (i%NIL) * pS);
+                Canvas.SetTop(neurons[i].Representation, fn_T + (i/NIL) * pS);
 
-                horizontalPos = firstNeuronPos + i * (spaces + neuronSize);
-
-                Canvas.SetLeft(neurons[i + (int)firstNeuronOnScreen].Representation, horizontalPos);
-                Canvas.SetTop(neurons[i + (int)firstNeuronOnScreen].Representation, (layerScreen.Height - neuronSize) / 2);
-
-                layerScreen.Children.Add(neurons[i + (int)firstNeuronOnScreen].Representation);
-                neurons[i + (int)firstNeuronOnScreen].SetSize(neuronSize);
+                neurons[i].SetSize(pS);
 
                 if (GetSetting(NumberRepresentationSettings.IsWhiteBlack) == 0)
-                    neurons[i + (int)firstNeuronOnScreen].ColorType = OneNumberRepresentation<Ellipse>.ColorTypes.GreenRed;
+                    neurons[i].ColorType = OneNumberRepresentation.ColorTypes.GreenRed;
                 else
-                    neurons[i + (int)firstNeuronOnScreen].ColorType = OneNumberRepresentation<Ellipse>.ColorTypes.WhiteBlack;
+                    neurons[i].ColorType = OneNumberRepresentation.ColorTypes.WhiteBlack;
             }
         }
 
-        private double CountFirstNeuronPos()
+        private int CountNumberInLine()
         {
-            var neuronsOnScreen = GetSetting(NumberRepresentationSettings.NeuronsOnScreen);
-            var defaultSize = GetSetting(NumberRepresentationSettings.HSize);
-            var spaces = GetSetting(NumberRepresentationSettings.Spaces);
-
-            double nLenght = neuronsOnScreen * (defaultSize + spaces) + spaces;
-
-            if (nLenght > layerScreen.Width)
-                return spaces;
-            else
-                return ((layerScreen.Width - nLenght) / 2 + spaces);
+            return neurons.Count / (int)GetSetting(NumberRepresentationSettings.RowNumber);
         }
 
-        private double CountNeuronSize()
+        private double CountPixelSize()
         {
-            var neuronsOnScreen = GetSetting(NumberRepresentationSettings.NeuronsOnScreen);
-            var defaultSize = GetSetting(NumberRepresentationSettings.HSize);
-            var spaces = GetSetting(NumberRepresentationSettings.Spaces);
-
-            if (CountFirstNeuronPos() > spaces)
-                return defaultSize;
-            else
-                return (layerScreen.Width - (neuronsOnScreen + 1) * spaces) / neuronsOnScreen;
+            return GetSetting(NumberRepresentationSettings.HSize) / GetSetting(NumberRepresentationSettings.RowNumber);
         }
+
+        private double CountFirstNeuronLeftPos()
+        {
+            double nLenght = CountNumberInLine() * CountPixelSize();
+            return (layerScreen.Width - nLenght) / 2;
+        }
+
+        private double CountFirstNeuronTopPos()
+        {
+            return (layerScreen.Height - GetSetting(NumberRepresentationSettings.HSize)) / 2;
+        }
+
 
         protected override void LayerScreen_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (layerScreen.Children[1].IsMouseOver || layerScreen.IsMouseOver)
             {
-                if (GetSetting(NumberRepresentationSettings.NeuronsOnScreen) + e.Delta / 50 > 0)
-                    SetSetting(NumberRepresentationSettings.NeuronsOnScreen, GetSetting(NumberRepresentationSettings.NeuronsOnScreen) + e.Delta / 50);
+                SetSetting(NumberRepresentationSettings.HSize, GetSetting(NumberRepresentationSettings.HSize) + e.Delta / 50);
                 Redraw();
             }
         }
@@ -102,18 +85,18 @@ namespace NeuralViewer.Screen
                     if (value > layerScreen.Height || value < 0) return false;
                     break;
                 case NumberRepresentationSettings.Spaces:
-                    if (value > layerSettings[NumberRepresentationSettings.HSize] || value < 0) return false;
+                    if (value != 0) return false;
                     break;
                 case NumberRepresentationSettings.NeuronsOnScreen:
-                    if (value > neurons.Count + layerSettings[NumberRepresentationSettings.FirstNeuronOnScreen] || value < 0) return false;
+                    if (value != 0) return false;
                     break;
                 case NumberRepresentationSettings.FirstNeuronOnScreen:
-                    if (value > neurons.Count || value < 0) return false;
+                    if (value != 0) return false;
                     break;
                 case NumberRepresentationSettings.IsWhiteBlack:
                     break;
                 case NumberRepresentationSettings.RowNumber:
-                    if (value != 1) return false;
+                    if (value > neurons.Count) return false;
                     break;
             }
             return true;
@@ -125,22 +108,27 @@ namespace NeuralViewer.Screen
         {
             for (int i = 0; i < num; i++)
             {
-                neurons.Add(new OneNumberRepresentation<Ellipse>());
+                neurons.Add(new PixelNeuron());
             }
         }
 
-        public ClassicLayer(Canvas screen, int num) : base(screen)
+        public PixelLayer(Canvas screen, int num) : base(screen)
         {
-            neurons = new List<OneNumberRepresentation<Ellipse>>();
+            neurons = new List<OneNumberRepresentation>();
             CreateTestNeurons(num);
 
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();
             layerSettings.Add(NumberRepresentationSettings.FirstNeuronOnScreen, 0);
-            layerSettings.Add(NumberRepresentationSettings.NeuronsOnScreen, 8);
+            layerSettings.Add(NumberRepresentationSettings.NeuronsOnScreen, 0);
             layerSettings.Add(NumberRepresentationSettings.HSize, layerScreen.Height / 2);
-            layerSettings.Add(NumberRepresentationSettings.Spaces, 4);
+            layerSettings.Add(NumberRepresentationSettings.Spaces, 0);
             layerSettings.Add(NumberRepresentationSettings.IsWhiteBlack, 1);
-            layerSettings.Add(NumberRepresentationSettings.RowNumber, 1);
+            layerSettings.Add(NumberRepresentationSettings.RowNumber, 4);
+
+            for (int i = 0; i < neurons.Count; i++)
+            {
+                layerScreen.Children.Add(neurons[i].Representation);
+            }
 
             DrawBorder(Brushes.DarkCyan);
             DrawBox();
@@ -151,4 +139,3 @@ namespace NeuralViewer.Screen
 }
 
 
-*/

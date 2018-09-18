@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace NeuralViewer.Screen
 {
-    class OneNumberRepresentation<T> where T : Shape, new()
+    abstract class OneNumberRepresentation
     {
         public enum ColorTypes
         {
@@ -53,17 +53,7 @@ namespace NeuralViewer.Screen
             get { return NeuronShape; }
         }
 
-        public T NeuronShape { get; private set; }
-
-        public OneNumberRepresentation()       // TODO: Create more useful constructor/s whith NeuralNet Lib
-        {
-            Random r = new Random((int)DateTime.Now.Ticks);
-            NeuronShape =  new T();
-            Value = r.NextDouble();
-
-            NeuronShape.Stroke = Brushes.AliceBlue;
-
-        }
+        public Shape NeuronShape { get; protected set; }
 
         public void SetSize(double x)
         {
