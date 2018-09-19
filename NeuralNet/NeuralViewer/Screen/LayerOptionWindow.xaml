@@ -17,7 +17,7 @@
                     <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
                 
-                <TextBox Grid.Column="0" Text="{Binding Path=SizeInt}"/>
+                <TextBox IsReadOnly="True" Grid.Column="0" Text="{Binding Path=SizeInt}"/>
                 
                 <Slider x:Name="SizeOption" 
                     Grid.Column="1"
@@ -30,8 +30,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
-                
-                <TextBox Grid.Column="0" Text="{Binding Path=AdvInt}"/>
+
+                <TextBox IsReadOnly="True" Grid.Column="0" Text="{Binding Path=AdvInt}"/>
                 <Slider x:Name="AdvancedOption"
                         Grid.Column="1"
                         Minimum="0"/>
