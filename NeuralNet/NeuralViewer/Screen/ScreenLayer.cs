@@ -15,7 +15,7 @@ namespace NeuralViewer.Screen
     {
 
         protected Canvas layerScreen;
-        protected List<OneNumberRepresentation> neurons;
+        protected List<ScreenNeuron> neurons;
         protected Dictionary<NumberRepresentationSettings, double> layerSettings;
 
         public enum NumberRepresentationSettings

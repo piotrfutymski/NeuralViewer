@@ -16,7 +16,7 @@ namespace NeuralViewer.Screen
 
         public ClassicLayer(Canvas screen) : base(screen)
         {
-            neurons = new List<OneNumberRepresentation>();
+            neurons = new List<ScreenNeuron>();
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();
 
             Redraw();
@@ -52,9 +52,9 @@ namespace NeuralViewer.Screen
                 neurons[i + (int)firstNeuronOnScreen].SetSize(neuronSize);
 
                 if (GetSetting(NumberRepresentationSettings.IsWhiteBlack) == 0)
-                    neurons[i + (int)firstNeuronOnScreen].ColorType = OneNumberRepresentation.ColorTypes.GreenRed;
+                    neurons[i + (int)firstNeuronOnScreen].ColorType = ScreenNeuron.ColorTypes.GreenRed;
                 else
-                    neurons[i + (int)firstNeuronOnScreen].ColorType = OneNumberRepresentation.ColorTypes.WhiteBlack;
+                    neurons[i + (int)firstNeuronOnScreen].ColorType = ScreenNeuron.ColorTypes.WhiteBlack;
             }
         }
 
@@ -131,7 +131,7 @@ namespace NeuralViewer.Screen
 
         public ClassicLayer(Canvas screen, int num) : base(screen)
         {
-            neurons = new List<OneNumberRepresentation>();
+            neurons = new List<ScreenNeuron>();
             CreateTestNeurons(num);
 
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();

@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace NeuralViewer.Screen
 {
-    class EllipseNeuron: OneNumberRepresentation
+    class EllipseNeuron: ScreenNeuron
     {
         public EllipseNeuron()       // TODO: Create more useful constructor/s whith NeuralNet Lib
         {

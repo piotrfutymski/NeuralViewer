@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace NeuralViewer.Screen
 {
-    class PixelNeuron:OneNumberRepresentation
+    class PixelNeuron:ScreenNeuron
     {
         public PixelNeuron()       // TODO: Create more useful constructor/s whith NeuralNet Lib
         {
