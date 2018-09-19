@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NeuralViewer"
         WindowStyle="ToolWindow"
+       
         mc:Ignorable="d"
         Title="Options" Height="100" Width="162">
     <Grid>

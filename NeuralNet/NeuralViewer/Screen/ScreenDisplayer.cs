@@ -44,6 +44,8 @@ namespace NeuralViewer.Screen
             mainScreen.Children.Add(lss);
 
             testLayers.Add( new PixelLayer(lss, 256));
+
+            
         }
 
 

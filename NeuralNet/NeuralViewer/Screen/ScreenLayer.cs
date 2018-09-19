@@ -38,6 +38,11 @@ namespace NeuralViewer.Screen
         protected abstract double GetSizeFormPercents(double value);
         public abstract void Redraw();
 
+        public ScreenNeuron this[int i]
+        {
+            get { return neurons[i];  }
+        }
+
         public ScreenLayer(Canvas screen)
         {
             layerScreen = screen;
@@ -121,7 +126,7 @@ namespace NeuralViewer.Screen
             optionButton.Height = 20;
             optionButton.Foreground = Brushes.DarkOrchid;
             optionWindow = SetOptionWindow();
-            optionButton.Click += (s, e) => { optionWindow.Show(); };
+            optionButton.Click += (s, e) => { optionWindow.ShowDialog(); };
 
 
             layerScreen.Children.Add(optionButton);

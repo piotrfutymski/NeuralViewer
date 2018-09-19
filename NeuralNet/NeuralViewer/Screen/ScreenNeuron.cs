@@ -51,8 +51,9 @@ namespace NeuralViewer.Screen
         public  Shape Representation
         {
             get { return NeuronShape; }
+            
         }
-
+        
         public Shape NeuronShape { get; protected set; }
 
         public void SetSize(double x)

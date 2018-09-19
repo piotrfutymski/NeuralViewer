@@ -172,6 +172,7 @@ namespace NeuralViewer.Screen
             layerSettings.Add(NumberRepresentationSettings.RowNumber, 1);
             hSize = GetSizeFormPercents(75);
 
+
             DrawBorder(Brushes.DarkCyan);
             DrawBox();
             DisplayOptionButton();
