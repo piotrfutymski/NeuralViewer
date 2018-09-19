@@ -18,6 +18,7 @@ namespace NeuralViewer.Screen
         protected List<ScreenNeuron> neurons;
         protected Dictionary<NumberRepresentationSettings, double> layerSettings;
         protected Button optionButton;
+        protected Window optionWindow;
 
         protected double hSize;
 
@@ -119,8 +120,9 @@ namespace NeuralViewer.Screen
             optionButton.Width = 20;
             optionButton.Height = 20;
             optionButton.Foreground = Brushes.DarkOrchid;
-            var w = SetOptionWindow();
-            optionButton.Click += (s, e) => { w.Show(); };
+            optionWindow = SetOptionWindow();
+            optionButton.Click += (s, e) => { optionWindow.Show(); };
+
 
             layerScreen.Children.Add(optionButton);
         }
