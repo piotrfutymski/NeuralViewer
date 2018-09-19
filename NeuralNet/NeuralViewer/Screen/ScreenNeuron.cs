@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace NeuralViewer.Screen
 {
-    abstract class OneNumberRepresentation
+    abstract class ScreenNeuron
     {
         public enum ColorTypes
         {

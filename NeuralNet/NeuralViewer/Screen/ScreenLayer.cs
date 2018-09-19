@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 
 namespace NeuralViewer.Screen
 {
-    abstract class NumbersRepresentation
+    abstract class ScreenLayer
     {
 
         protected Canvas layerScreen;
@@ -32,7 +32,7 @@ namespace NeuralViewer.Screen
         protected abstract bool CheckingSettingsValue(NumberRepresentationSettings name, double value);
         public abstract void Redraw();
 
-        public NumbersRepresentation(Canvas screen)
+        public ScreenLayer(Canvas screen)
         {
             layerScreen = screen;
             neurons = null;

@@ -15,7 +15,7 @@ namespace NeuralViewer.Screen
     class ScreenDisplayer
     {
         Canvas mainScreen;
-        List<NumbersRepresentation> testLayers;
+        List<ScreenLayer> testLayers;
 
         public ScreenDisplayer(Canvas screen)
         {
@@ -23,7 +23,7 @@ namespace NeuralViewer.Screen
 
             //************* For test puproses we are creating 5 testLayers *************************//
 
-            testLayers = new List<NumbersRepresentation>();
+            testLayers = new List<ScreenLayer>();
             for (int i = 0; i < 4; i++)
             {
                 Canvas lscreen = new Canvas();

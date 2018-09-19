@@ -57,7 +57,7 @@
     <Compile Include="Screen\ElipseNeuron.cs" />
     <Compile Include="Screen\PixelNeuron.cs" />
     <Compile Include="Screen\ClassicLayer.cs" />
-    <Compile Include="Screen\NumbersRepresentation.cs" />
+    <Compile Include="Screen\ScreenLayer.cs" />
     <Compile Include="Screen\OneNumberRepresentation.cs" />
     <Compile Include="Screen\PixelLayer.cs" />
     <Compile Include="Screen\ScreenDisplayer.cs" />

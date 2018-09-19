@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 
 namespace NeuralViewer.Screen
 {
-    class ClassicLayer : NumbersRepresentation
+    class ClassicLayer : ScreenLayer
     {
 
         public ClassicLayer(Canvas screen) : base(screen)

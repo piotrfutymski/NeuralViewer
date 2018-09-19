@@ -12,7 +12,7 @@ using System.Windows.Shapes;
 
 namespace NeuralViewer.Screen
 {
-    class PixelLayer : NumbersRepresentation
+    class PixelLayer : ScreenLayer
     {
         public PixelLayer(Canvas screen) : base(screen)
         {
@@ -122,10 +122,10 @@ namespace NeuralViewer.Screen
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();
             layerSettings.Add(NumberRepresentationSettings.FirstNeuronOnScreen, 0);
             layerSettings.Add(NumberRepresentationSettings.NeuronsOnScreen, 0);
-            layerSettings.Add(NumberRepresentationSettings.HSize, layerScreen.Height / 8);
+            layerSettings.Add(NumberRepresentationSettings.HSize, layerScreen.Height / 2);
             layerSettings.Add(NumberRepresentationSettings.Spaces, 0);
             layerSettings.Add(NumberRepresentationSettings.IsWhiteBlack, 1);
-            layerSettings.Add(NumberRepresentationSettings.RowNumber, 4);
+            layerSettings.Add(NumberRepresentationSettings.RowNumber, 16);
 
             for (int i = 0; i < neurons.Count; i++)
             {
