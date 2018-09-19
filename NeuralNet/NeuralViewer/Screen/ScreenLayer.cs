@@ -119,11 +119,12 @@ namespace NeuralViewer.Screen
             optionButton.Width = 20;
             optionButton.Height = 20;
             optionButton.Foreground = Brushes.DarkOrchid;
-            var w = SetOptionWindow();
+            LayerOptionWindow w = (LayerOptionWindow)SetOptionWindow();
+
             optionButton.Click += (s, e) => { w.Show(); };
+            
 
             layerScreen.Children.Add(optionButton);
         }
-
     }
 }

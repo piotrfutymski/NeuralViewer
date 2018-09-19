@@ -79,9 +79,12 @@ namespace NeuralViewer.Screen
 
         protected override Window SetOptionWindow()
         {
-            Window w = new LayerOptionWindow();
+            LayerOptionWindow w = new LayerOptionWindow();
             Slider sizeSlieder = w.FindName("SizeOption") as Slider;
             Slider advancedSlieder = w.FindName("AdvancedOption") as Slider;
+
+            w.SizeInt = (int)GetSetting(NumberRepresentationSettings.Percent);
+            w.AdvInt = (int)GetSetting(NumberRepresentationSettings.RowNumber);
 
             sizeSlieder.Maximum = 100;
             sizeSlieder.Value = GetSetting(NumberRepresentationSettings.Percent);
@@ -91,9 +94,9 @@ namespace NeuralViewer.Screen
                 {
                     SetSetting(NumberRepresentationSettings.Percent, (int)sizeSlieder.Value);
                     SetSetting(NumberRepresentationSettings.RowNumber, (int)advancedSlieder.Value);
+                    w.SizeInt = (int)GetSetting(NumberRepresentationSettings.Percent);
                 }
             };
-
 
             advancedSlieder.Maximum = neurons.Count / 4;
             advancedSlieder.Value = GetSetting(NumberRepresentationSettings.RowNumber);
@@ -104,6 +107,7 @@ namespace NeuralViewer.Screen
                 {
                     SetSetting(NumberRepresentationSettings.Percent, (int)sizeSlieder.Value);
                     SetSetting(NumberRepresentationSettings.RowNumber, (int)advancedSlieder.Value);
+                    w.AdvInt = (int)GetSetting(NumberRepresentationSettings.RowNumber);
                 }
             };
             return w;

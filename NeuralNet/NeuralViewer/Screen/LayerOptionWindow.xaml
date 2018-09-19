@@ -5,10 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NeuralViewer"
         WindowStyle="ToolWindow"
+        ResizeMode="NoResize"
         mc:Ignorable="d"
-        Title="Options" Height="100" Width="162">
-    <Grid>
-        <Slider x:Name="SizeOption" HorizontalAlignment="Left" Margin="10,10,0,0" Minimum="0"  VerticalAlignment="Top" Width="134"/>
-        <Slider x:Name="AdvancedOption" HorizontalAlignment="Left" Margin="10,41,0,0" Minimum="0" VerticalAlignment="Top" Width="134"/>
-    </Grid>
+        Title="Options" Height="128" Width="180">
+    <Border Padding="10">
+        <StackPanel>
+            <TextBlock x:Name="SizeTxt" Text="Size:"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBox Grid.Column="0" Text="{Binding Path=SizeInt}"/>
+                
+                <Slider x:Name="SizeOption" 
+                    Grid.Column="1"
+                    Minimum="0"/>
+            </Grid>
+            
+            <TextBlock x:Name="AdvancedTxt" Text="Advanced:"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBox Grid.Column="0" Text="{Binding Path=AdvInt}"/>
+                <Slider x:Name="AdvancedOption"
+                        Grid.Column="1"
+                        Minimum="0"/>
+            </Grid>
+        </StackPanel>
+    </Border>
 </Window>

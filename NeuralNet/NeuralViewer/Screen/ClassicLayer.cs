@@ -93,16 +93,20 @@ namespace NeuralViewer.Screen
 
         protected override Window SetOptionWindow()
         {
-            Window w = new LayerOptionWindow();
+            LayerOptionWindow w = new LayerOptionWindow();
             Slider sizeSlieder = w.FindName("SizeOption") as Slider;
             Slider advancedSlieder = w.FindName("AdvancedOption") as Slider;
 
             sizeSlieder.Maximum = neurons.Count;
             sizeSlieder.Value = GetSetting(NumberRepresentationSettings.NeuronsOnScreen);
+            w.AdvInt = (int)GetSetting(NumberRepresentationSettings.FirstNeuronOnScreen);
+            w.SizeInt = (int)GetSetting(NumberRepresentationSettings.NeuronsOnScreen);
             sizeSlieder.ValueChanged += (e, s) =>
             {
+                w.SizeInt = (int)GetSetting(NumberRepresentationSettings.NeuronsOnScreen);
                 if (GetSetting(NumberRepresentationSettings.NeuronsOnScreen) != (int)sizeSlieder.Value)
                     SetSetting(NumberRepresentationSettings.NeuronsOnScreen, (int)sizeSlieder.Value);
+            
             };
 
 
@@ -111,6 +115,7 @@ namespace NeuralViewer.Screen
 
             advancedSlieder.ValueChanged += (e, s) =>
             {
+                w.AdvInt = (int)GetSetting(NumberRepresentationSettings.FirstNeuronOnScreen);
                 if (GetSetting(NumberRepresentationSettings.FirstNeuronOnScreen) != (int)advancedSlieder.Value)
                     SetSetting(NumberRepresentationSettings.FirstNeuronOnScreen, (int)advancedSlieder.Value);
             };
