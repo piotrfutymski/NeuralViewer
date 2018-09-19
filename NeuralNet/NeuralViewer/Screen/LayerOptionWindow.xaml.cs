@@ -10,24 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Runtime.InteropServices;
 
 namespace NeuralViewer
 {
     /// <summary>
-    /// Logika interakcji dla klasy MainWindow.xaml
+    /// Logika interakcji dla klasy LayerOptionWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class LayerOptionWindow : Window
     {
-        Screen.ScreenDisplayer mScreenDisplayer;
-
-        public MainWindow()
+        public LayerOptionWindow()
         {
             InitializeComponent();
-            mScreenDisplayer = new Screen.ScreenDisplayer(n_screen);
         }
-
     }
 }

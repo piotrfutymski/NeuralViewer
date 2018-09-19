@@ -25,7 +25,6 @@ namespace NeuralViewer.Screen
         public override void Redraw()
         {
             var neuronsOnScreen = GetSetting(NumberRepresentationSettings.NeuronsOnScreen);
-            var defaultSize = GetSetting(NumberRepresentationSettings.HSize);
             var spaces = GetSetting(NumberRepresentationSettings.Spaces);
             var firstNeuronOnScreen = GetSetting(NumberRepresentationSettings.FirstNeuronOnScreen);
 
@@ -61,10 +60,9 @@ namespace NeuralViewer.Screen
         private double CountFirstNeuronPos()
         {
             var neuronsOnScreen = GetSetting(NumberRepresentationSettings.NeuronsOnScreen);
-            var defaultSize = GetSetting(NumberRepresentationSettings.HSize);
             var spaces = GetSetting(NumberRepresentationSettings.Spaces);
 
-            double nLenght = neuronsOnScreen * (defaultSize + spaces) + spaces;
+            double nLenght = neuronsOnScreen * (hSize + spaces) + spaces;
 
             if (nLenght > layerScreen.Width)
                 return spaces;
@@ -75,11 +73,10 @@ namespace NeuralViewer.Screen
         private double CountNeuronSize()
         {
             var neuronsOnScreen = GetSetting(NumberRepresentationSettings.NeuronsOnScreen);
-            var defaultSize = GetSetting(NumberRepresentationSettings.HSize);
             var spaces = GetSetting(NumberRepresentationSettings.Spaces);
 
             if (CountFirstNeuronPos() > spaces)
-                return defaultSize;
+                return hSize;
             else
                 return (layerScreen.Width - (neuronsOnScreen + 1) * spaces) / neuronsOnScreen;
         }
@@ -94,21 +91,48 @@ namespace NeuralViewer.Screen
             }
         }
 
+        protected override Window SetOptionWindow()
+        {
+            Window w = new LayerOptionWindow();
+            Slider sizeSlieder = w.FindName("SizeOption") as Slider;
+            Slider advancedSlieder = w.FindName("AdvancedOption") as Slider;
+
+            sizeSlieder.Maximum = neurons.Count;
+            sizeSlieder.Value = GetSetting(NumberRepresentationSettings.NeuronsOnScreen);
+            sizeSlieder.ValueChanged += (e, s) =>
+            {
+                if (GetSetting(NumberRepresentationSettings.NeuronsOnScreen) != (int)sizeSlieder.Value)
+                    SetSetting(NumberRepresentationSettings.NeuronsOnScreen, (int)sizeSlieder.Value);
+            };
+
+
+            advancedSlieder.Maximum = neurons.Count;
+            advancedSlieder.Value = GetSetting(NumberRepresentationSettings.FirstNeuronOnScreen);
+
+            advancedSlieder.ValueChanged += (e, s) =>
+            {
+                if (GetSetting(NumberRepresentationSettings.FirstNeuronOnScreen) != (int)advancedSlieder.Value)
+                    SetSetting(NumberRepresentationSettings.FirstNeuronOnScreen, (int)advancedSlieder.Value);
+            };
+            return w;
+
+        }
+
         protected override bool CheckingSettingsValue(NumberRepresentationSettings name, double value)
         {
             switch (name)
             {
-                case NumberRepresentationSettings.HSize:
-                    if (value > layerScreen.Height || value < 0) return false;
+                case NumberRepresentationSettings.Percent:
+                    if (value > 100 || value < 0) return false;
                     break;
                 case NumberRepresentationSettings.Spaces:
-                    if (value > layerSettings[NumberRepresentationSettings.HSize]|| value < 0) return false;
+                    if (value > hSize || value < 0) return false;
                     break;
                 case NumberRepresentationSettings.NeuronsOnScreen:
-                    if (value > neurons.Count + layerSettings[NumberRepresentationSettings.FirstNeuronOnScreen] || value < 0) return false;
+                    if (value > neurons.Count - layerSettings[NumberRepresentationSettings.FirstNeuronOnScreen] || value < 0) return false;
                     break;
                 case NumberRepresentationSettings.FirstNeuronOnScreen:
-                    if (value > neurons.Count || value < 0) return false;
+                    if (value > neurons.Count - layerSettings[NumberRepresentationSettings.NeuronsOnScreen] || value < 0) return false;
                     break;
                 case NumberRepresentationSettings.IsWhiteBlack:
                     break;
@@ -117,6 +141,11 @@ namespace NeuralViewer.Screen
                     break;
             }
             return true;
+        }
+
+        protected override double GetSizeFormPercents(double value)
+        {
+            return value / 100 * layerScreen.Height;
         }
 
 
@@ -137,13 +166,15 @@ namespace NeuralViewer.Screen
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();
             layerSettings.Add(NumberRepresentationSettings.FirstNeuronOnScreen, 0);
             layerSettings.Add(NumberRepresentationSettings.NeuronsOnScreen, 8);
-            layerSettings.Add(NumberRepresentationSettings.HSize, layerScreen.Height / 2);
+            layerSettings.Add(NumberRepresentationSettings.Percent, 75);
             layerSettings.Add(NumberRepresentationSettings.Spaces, 4);
             layerSettings.Add(NumberRepresentationSettings.IsWhiteBlack, 1);
             layerSettings.Add(NumberRepresentationSettings.RowNumber, 1);
+            hSize = GetSizeFormPercents(75);
 
             DrawBorder(Brushes.DarkCyan);
             DrawBox();
+            DisplayOptionButton();
 
             Redraw();
         }

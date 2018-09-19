@@ -17,10 +17,13 @@ namespace NeuralViewer.Screen
         protected Canvas layerScreen;
         protected List<ScreenNeuron> neurons;
         protected Dictionary<NumberRepresentationSettings, double> layerSettings;
+        protected Button optionButton;
+
+        protected double hSize;
 
         public enum NumberRepresentationSettings
         {
-            HSize,                                           //     max height of layer
+            Percent,                                           //     max height of layer
             Spaces,                                             
             NeuronsOnScreen,
             FirstNeuronOnScreen,
@@ -29,13 +32,17 @@ namespace NeuralViewer.Screen
         }
 
         protected abstract void LayerScreen_MouseWheel(object sender, MouseWheelEventArgs e);
+        protected abstract Window SetOptionWindow();
         protected abstract bool CheckingSettingsValue(NumberRepresentationSettings name, double value);
+        protected abstract double GetSizeFormPercents(double value);
         public abstract void Redraw();
 
         public ScreenLayer(Canvas screen)
         {
             layerScreen = screen;
             neurons = null;
+            layerSettings = null;
+
             layerScreen.MouseWheel += LayerScreen_MouseWheel;
         }
 
@@ -63,6 +70,8 @@ namespace NeuralViewer.Screen
                 if(CheckingSettingsValue(name, value))
                 {
                     layerSettings[name] = value;
+                    if (name == NumberRepresentationSettings.Percent)
+                        hSize = GetSizeFormPercents(value);
                     Redraw();
                 }
             }             
@@ -102,6 +111,18 @@ namespace NeuralViewer.Screen
             b.Fill = Brushes.Black;
             layerScreen.Children.Add(b);
 
+        }
+
+        protected void DisplayOptionButton()
+        {
+            optionButton = new Button();
+            optionButton.Width = 20;
+            optionButton.Height = 20;
+            optionButton.Foreground = Brushes.DarkOrchid;
+            var w = SetOptionWindow();
+            optionButton.Click += (s, e) => { w.Show(); };
+
+            layerScreen.Children.Add(optionButton);
         }
 
     }

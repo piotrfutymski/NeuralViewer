@@ -53,7 +53,7 @@ namespace NeuralViewer.Screen
 
         private double CountPixelSize()
         {
-            return GetSetting(NumberRepresentationSettings.HSize) / GetSetting(NumberRepresentationSettings.RowNumber);
+            return hSize / GetSetting(NumberRepresentationSettings.RowNumber);
         }
 
         private double CountFirstNeuronLeftPos()
@@ -64,7 +64,7 @@ namespace NeuralViewer.Screen
 
         private double CountFirstNeuronTopPos()
         {
-            return (layerScreen.Height - GetSetting(NumberRepresentationSettings.HSize)) / 2;
+            return (layerScreen.Height - hSize) / 2;
         }
 
 
@@ -72,19 +72,49 @@ namespace NeuralViewer.Screen
         {
             if (layerScreen.Children[1].IsMouseOver || layerScreen.IsMouseOver)
             {
-                SetSetting(NumberRepresentationSettings.HSize, GetSetting(NumberRepresentationSettings.HSize) + e.Delta / 50);
+                SetSetting(NumberRepresentationSettings.Percent, GetSetting(NumberRepresentationSettings.Percent) + e.Delta / 100);
                 Redraw();
             }
+        }
+
+        protected override Window SetOptionWindow()
+        {
+            Window w = new LayerOptionWindow();
+            Slider sizeSlieder = w.FindName("SizeOption") as Slider;
+            Slider advancedSlieder = w.FindName("AdvancedOption") as Slider;
+
+            sizeSlieder.Maximum = 100;
+            sizeSlieder.Value = GetSetting(NumberRepresentationSettings.Percent);
+            sizeSlieder.ValueChanged += (e, s) =>
+            {
+                if (GetSetting(NumberRepresentationSettings.Percent) != (int)sizeSlieder.Value)
+                {
+                    SetSetting(NumberRepresentationSettings.Percent, (int)sizeSlieder.Value);
+                    SetSetting(NumberRepresentationSettings.RowNumber, (int)advancedSlieder.Value);
+                }
+            };
+
+
+            advancedSlieder.Maximum = neurons.Count / 4;
+            advancedSlieder.Value = GetSetting(NumberRepresentationSettings.RowNumber);
+
+            advancedSlieder.ValueChanged += (e, s) =>
+            {
+                if (GetSetting(NumberRepresentationSettings.RowNumber) != (int)advancedSlieder.Value)
+                {
+                    SetSetting(NumberRepresentationSettings.Percent, (int)sizeSlieder.Value);
+                    SetSetting(NumberRepresentationSettings.RowNumber, (int)advancedSlieder.Value);
+                }
+            };
+            return w;
         }
 
         protected override bool CheckingSettingsValue(NumberRepresentationSettings name, double value)
         {
             switch (name)
             {
-                case NumberRepresentationSettings.HSize:
-                    if (value > layerScreen.Height || 
-                        (value / GetSetting(NumberRepresentationSettings.RowNumber) * neurons.Count / (int)GetSetting(NumberRepresentationSettings.RowNumber)) > layerScreen.Width || 
-                        value < 0) return false;
+                case NumberRepresentationSettings.Percent:
+                    if (value > 100 ||  value < 0) return false;
                     break;
                 case NumberRepresentationSettings.Spaces:
                     if (value != 0) return false;
@@ -98,10 +128,22 @@ namespace NeuralViewer.Screen
                 case NumberRepresentationSettings.IsWhiteBlack:
                     break;
                 case NumberRepresentationSettings.RowNumber:
-                    if (value > neurons.Count) return false;
+                    if (value > neurons.Count ||
+                        (hSize / value * neurons.Count /  value) > layerScreen.Width)
+                        return false;
                     break;
             }
             return true;
+        }
+
+        protected override double GetSizeFormPercents(double value)
+        {
+            double normal = value / 100 * layerScreen.Height;
+            double widthalert = value / 100 * layerScreen.Width * GetSetting(NumberRepresentationSettings.RowNumber) * GetSetting(NumberRepresentationSettings.RowNumber) / neurons.Count;
+            if ((normal / GetSetting(NumberRepresentationSettings.RowNumber) * neurons.Count / (int)GetSetting(NumberRepresentationSettings.RowNumber)) > layerScreen.Width)
+                return widthalert;
+            else
+                return normal;
         }
 
 
@@ -122,10 +164,11 @@ namespace NeuralViewer.Screen
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();
             layerSettings.Add(NumberRepresentationSettings.FirstNeuronOnScreen, 0);
             layerSettings.Add(NumberRepresentationSettings.NeuronsOnScreen, 0);
-            layerSettings.Add(NumberRepresentationSettings.HSize, layerScreen.Height / 2);
+            layerSettings.Add(NumberRepresentationSettings.Percent, 80);
             layerSettings.Add(NumberRepresentationSettings.Spaces, 0);
             layerSettings.Add(NumberRepresentationSettings.IsWhiteBlack, 1);
-            layerSettings.Add(NumberRepresentationSettings.RowNumber, 16);
+            layerSettings.Add(NumberRepresentationSettings.RowNumber, 8);
+            hSize = GetSizeFormPercents(80);
 
             for (int i = 0; i < neurons.Count; i++)
             {
@@ -134,6 +177,7 @@ namespace NeuralViewer.Screen
 
             DrawBorder(Brushes.DarkCyan);
             DrawBox();
+            DisplayOptionButton();
 
             Redraw();
         }
