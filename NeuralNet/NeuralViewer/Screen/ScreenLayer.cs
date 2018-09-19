@@ -18,6 +18,7 @@ namespace NeuralViewer.Screen
         protected List<ScreenNeuron> neurons;
         protected Dictionary<NumberRepresentationSettings, double> layerSettings;
         protected Button optionButton;
+        protected Window optionWindow;
 
         protected double hSize;
 
@@ -36,6 +37,11 @@ namespace NeuralViewer.Screen
         protected abstract bool CheckingSettingsValue(NumberRepresentationSettings name, double value);
         protected abstract double GetSizeFormPercents(double value);
         public abstract void Redraw();
+
+        public ScreenNeuron this[int i]
+        {
+            get { return neurons[i];  }
+        }
 
         public ScreenLayer(Canvas screen)
         {
@@ -120,9 +126,10 @@ namespace NeuralViewer.Screen
             optionButton.Height = 20;
             optionButton.Foreground = Brushes.DarkOrchid;
             LayerOptionWindow w = (LayerOptionWindow)SetOptionWindow();
-
-            optionButton.Click += (s, e) => { w.Show(); };
             
+            optionWindow = SetOptionWindow();
+            optionButton.Click += (s, e) => { optionWindow.ShowDialog(); };
+
 
             layerScreen.Children.Add(optionButton);
         }
