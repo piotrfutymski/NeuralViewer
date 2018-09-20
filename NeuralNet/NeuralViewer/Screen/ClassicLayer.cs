@@ -14,14 +14,6 @@ namespace NeuralViewer.Screen
     class ClassicLayer : ScreenLayer
     {
 
-        public ClassicLayer(Canvas screen) : base(screen)
-        {
-            neurons = new List<ScreenNeuron>();
-            layerSettings = new Dictionary<NumberRepresentationSettings, double>();
-
-            Redraw();
-        }
-
         public override void Redraw()
         {
             var neuronsOnScreen = GetSetting(NumberRepresentationSettings.NeuronsOnScreen);
@@ -155,19 +147,9 @@ namespace NeuralViewer.Screen
 
 
         //Test only
-        private void CreateTestNeurons(int num)
-        {
-            for (int i = 0; i < num; i++)
-            {
-                neurons.Add(new EllipseNeuron());             
-            }
-        }
 
-        public ClassicLayer(Canvas screen, int num) : base(screen)
+        public ClassicLayer(Canvas screen, int num) : base(screen, num)
         {
-            neurons = new List<ScreenNeuron>();
-            CreateTestNeurons(num);
-
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();
             layerSettings.Add(NumberRepresentationSettings.FirstNeuronOnScreen, 0);
             layerSettings.Add(NumberRepresentationSettings.NeuronsOnScreen, 8);
@@ -175,6 +157,7 @@ namespace NeuralViewer.Screen
             layerSettings.Add(NumberRepresentationSettings.Spaces, 4);
             layerSettings.Add(NumberRepresentationSettings.IsWhiteBlack, 1);
             layerSettings.Add(NumberRepresentationSettings.RowNumber, 1);
+            layerSettings.Add(NumberRepresentationSettings.Markable, 1);
             hSize = GetSizeFormPercents(75);
 
 
@@ -183,6 +166,16 @@ namespace NeuralViewer.Screen
             DisplayOptionButton();
 
             Redraw();
+        }
+
+        protected override void CreateTestNeurons(int num)
+        {
+            for (int i = 0; i < num; i++)
+            {
+                neurons.Add(new EllipseNeuron());
+                neurons[i].Representation.Name ="n" + i.ToString();
+            }
+
         }
     }
 }

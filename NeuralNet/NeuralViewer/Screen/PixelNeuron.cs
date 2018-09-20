@@ -17,6 +17,17 @@ namespace NeuralViewer.Screen
             Value = r.NextDouble();
 
             NeuronShape.StrokeThickness = 0;
+            NeuronShape.Stroke = Brushes.Red;
+        }
+
+        public override void DismarkMe()
+        {
+            NeuronShape.StrokeThickness = 0;
+        }
+
+        public override void MarkMe()
+        {
+            NeuronShape.StrokeThickness = 1;
         }
     }
 }

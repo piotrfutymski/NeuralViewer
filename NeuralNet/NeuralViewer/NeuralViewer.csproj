@@ -60,11 +60,11 @@
     <Compile Include="Screen\ElipseNeuron.cs" />
     <Compile Include="Screen\PixelNeuron.cs" />
     <Compile Include="Screen\ClassicLayer.cs" />
+    <Compile Include="Screen\Screen.cs" />
     <Compile Include="Screen\ScreenLayer.cs" />
     <Compile Include="Screen\ScreenNeuron.cs" />
     <Compile Include="Screen\PixelLayer.cs" />
-    <Compile Include="Screen\ScreenDisplayer.cs" />
-    <Compile Include="Screen\ScreenDisplayerSettings.cs" />
+    <Compile Include="Screen\MainScreen.cs" />
     <Page Include="Screen\LayerOptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

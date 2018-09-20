@@ -18,5 +18,15 @@ namespace NeuralViewer.Screen
 
             NeuronShape.Stroke = Brushes.AliceBlue;
         }
+
+        public override void DismarkMe()
+        {
+            NeuronShape.Stroke = Brushes.AliceBlue;
+        }
+
+        public override void MarkMe()
+        {
+            NeuronShape.Stroke = Brushes.Red;
+        }
     }
 }

@@ -14,14 +14,6 @@ namespace NeuralViewer.Screen
 {
     class PixelLayer : ScreenLayer
     {
-        public PixelLayer(Canvas screen) : base(screen)
-        {
-            neurons = new List<ScreenNeuron>();
-            layerSettings = new Dictionary<NumberRepresentationSettings, double>();
-
-            Redraw();
-        }
-
         public override void Redraw()
         {
 
@@ -152,18 +144,10 @@ namespace NeuralViewer.Screen
 
 
         //Test only
-        private void CreateTestNeurons(int num)
-        {
-            for (int i = 0; i < num; i++)
-            {
-                neurons.Add(new PixelNeuron());
-            }
-        }
+       
 
-        public PixelLayer(Canvas screen, int num) : base(screen)
-        {
-            neurons = new List<ScreenNeuron>();
-            CreateTestNeurons(num);
+        public PixelLayer(Canvas screen, int num) : base(screen, num)
+        {          
 
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();
             layerSettings.Add(NumberRepresentationSettings.FirstNeuronOnScreen, 0);
@@ -172,18 +156,24 @@ namespace NeuralViewer.Screen
             layerSettings.Add(NumberRepresentationSettings.Spaces, 0);
             layerSettings.Add(NumberRepresentationSettings.IsWhiteBlack, 1);
             layerSettings.Add(NumberRepresentationSettings.RowNumber, 8);
+            layerSettings.Add(NumberRepresentationSettings.Markable, 1);
             hSize = GetSizeFormPercents(80);
-
-            for (int i = 0; i < neurons.Count; i++)
-            {
-                layerScreen.Children.Add(neurons[i].Representation);
-            }
 
             DrawBorder(Brushes.DarkCyan);
             DrawBox();
             DisplayOptionButton();
 
             Redraw();
+        }
+
+        protected override void CreateTestNeurons(int num)
+        {
+           for (int i = 0; i < num; i++)
+           {
+                neurons.Add(new PixelNeuron());
+                neurons[i].Representation.Name = "n" + i.ToString();
+           }
+
         }
     }
 }

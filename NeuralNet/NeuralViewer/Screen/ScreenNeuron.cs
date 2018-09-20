@@ -53,7 +53,12 @@ namespace NeuralViewer.Screen
             get { return NeuronShape; }
             
         }
-        
+
+        abstract public void MarkMe();
+        abstract public void DismarkMe();
+
+
+
         public Shape NeuronShape { get; protected set; }
 
         public void SetSize(double x)

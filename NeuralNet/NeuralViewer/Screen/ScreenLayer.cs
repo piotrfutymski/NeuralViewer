@@ -20,6 +20,8 @@ namespace NeuralViewer.Screen
         protected Button optionButton;
         protected Window optionWindow;
 
+        protected int markedNeuron;
+
         protected double hSize;
 
         public enum NumberRepresentationSettings
@@ -29,7 +31,8 @@ namespace NeuralViewer.Screen
             NeuronsOnScreen,
             FirstNeuronOnScreen,
             IsWhiteBlack,
-            RowNumber
+            RowNumber,
+            Markable
         }
 
         protected abstract void LayerScreen_MouseWheel(object sender, MouseWheelEventArgs e);
@@ -43,11 +46,38 @@ namespace NeuralViewer.Screen
             get { return neurons[i];  }
         }
 
-        public ScreenLayer(Canvas screen)
+        public ScreenNeuron GetMarkedNeuron()
+        {
+            if (markedNeuron != -1)
+                return neurons[markedNeuron];
+            else
+                return null;
+        }
+
+        public ScreenLayer(Canvas screen, int num)
         {
             layerScreen = screen;
             neurons = null;
             layerSettings = null;
+            neurons = new List<ScreenNeuron>();
+            CreateTestNeurons(num);
+
+            for (int i = 0; i < neurons.Count; i++)
+            {
+                layerScreen.Children.Add(neurons[i].Representation);
+                neurons[i].Representation.MouseLeftButtonDown += (s, e) =>
+                {
+                    if (GetSetting(NumberRepresentationSettings.Markable) != 0)
+                    {
+                        if (GetMarkedNeuron() != null)
+                            GetMarkedNeuron().DismarkMe();
+                        string x = (s as Shape).Name;
+                        x = x.Remove(0,1);
+                        markedNeuron = int.Parse(x);
+                        neurons[markedNeuron].MarkMe();
+                    }
+                };
+            }
 
             layerScreen.MouseWheel += LayerScreen_MouseWheel;
         }
@@ -133,5 +163,8 @@ namespace NeuralViewer.Screen
 
             layerScreen.Children.Add(optionButton);
         }
+
+        protected abstract void CreateTestNeurons(int num);
+
     }
 }

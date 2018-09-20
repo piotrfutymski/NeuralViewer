@@ -12,12 +12,11 @@ namespace NeuralViewer.Screen
     /// This Class is used to display all screen elements into spacialy prepered canvas
     /// </summary>
 
-    class ScreenDisplayer
+    class MainScreen : Screen
     {
-        Canvas mainScreen;
         List<ScreenLayer> testLayers;
 
-        public ScreenDisplayer(Canvas screen)
+        public MainScreen(Canvas screen)
         {
             mainScreen = screen;
 
