@@ -73,8 +73,13 @@ namespace NeuralViewer.Screen
                             GetMarkedNeuron().DismarkMe();
                         string x = (s as Shape).Name;
                         x = x.Remove(0,1);
-                        markedNeuron = int.Parse(x);
-                        neurons[markedNeuron].MarkMe();
+                        if(markedNeuron == int.Parse(x))
+                            markedNeuron = -1;
+                        else
+                        {
+                            markedNeuron = int.Parse(x);
+                            neurons[markedNeuron].MarkMe();
+                        }                     
                     }
                 };
             }
