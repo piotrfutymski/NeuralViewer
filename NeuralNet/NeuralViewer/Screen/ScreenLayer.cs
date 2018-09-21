@@ -13,12 +13,11 @@ namespace NeuralViewer.Screen
 {
     abstract class ScreenLayer
     {
-
+        public EventHandler OnRedrawing;
         protected Canvas layerScreen;
         protected List<ScreenNeuron> neurons;
         protected Dictionary<NumberRepresentationSettings, double> layerSettings;
         protected Button optionButton;
-        protected Window optionWindow;
 
         protected int markedNeuron;
 
@@ -41,9 +40,16 @@ namespace NeuralViewer.Screen
         protected abstract double GetSizeFormPercents(double value);
         public abstract void Redraw();
 
+
+
         public ScreenNeuron this[int i]
         {
             get { return neurons[i];  }
+        }
+
+        public int Count()
+        {
+            return neurons.Count;
         }
 
         public ScreenNeuron GetMarkedNeuron()
@@ -54,6 +60,11 @@ namespace NeuralViewer.Screen
                 return null;
         }
 
+        public int GetMarkedNeuronNum()
+        {
+            return markedNeuron;
+        }
+
         public ScreenLayer(Canvas screen, int num)
         {
             layerScreen = screen;
@@ -61,6 +72,7 @@ namespace NeuralViewer.Screen
             layerSettings = null;
             neurons = new List<ScreenNeuron>();
             CreateTestNeurons(num);
+            markedNeuron = -1;
 
             for (int i = 0; i < neurons.Count; i++)
             {
@@ -79,7 +91,8 @@ namespace NeuralViewer.Screen
                         {
                             markedNeuron = int.Parse(x);
                             neurons[markedNeuron].MarkMe();
-                        }                     
+                        }
+                        OnRedrawing?.Invoke(this, null);
                     }
                 };
             }
@@ -130,6 +143,11 @@ namespace NeuralViewer.Screen
                 throw new ArgumentException();
         }
 
+        public bool IsNeuronOnScreen(ScreenNeuron nn )
+        {
+            return layerScreen.Children.Contains(nn.Representation);
+        }
+
         protected void DrawBorder(SolidColorBrush color)
         {
             Border b = new Border();
@@ -162,8 +180,7 @@ namespace NeuralViewer.Screen
             optionButton.Foreground = Brushes.DarkOrchid;
             LayerOptionWindow w = (LayerOptionWindow)SetOptionWindow();
             
-            optionWindow = SetOptionWindow();
-            optionButton.Click += (s, e) => { optionWindow.ShowDialog(); };
+            optionButton.Click += (s, e) => { SetOptionWindow().ShowDialog(); };
 
 
             layerScreen.Children.Add(optionButton);

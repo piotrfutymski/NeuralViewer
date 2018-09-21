@@ -47,6 +47,8 @@ namespace NeuralViewer.Screen
                 else
                     neurons[i + (int)firstNeuronOnScreen].ColorType = ScreenNeuron.ColorTypes.WhiteBlack;
             }
+
+            OnRedrawing?.Invoke(this, null);
         }
 
         private double CountFirstNeuronPos()

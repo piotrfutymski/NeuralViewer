@@ -58,13 +58,16 @@ namespace NeuralViewer.Screen
         abstract public void DismarkMe();
 
 
-
         public Shape NeuronShape { get; protected set; }
 
         public void SetSize(double x)
         {
             NeuronShape.Height = x;
             NeuronShape.Width = x;
+        }
+        public double GetSize()
+        {
+            return NeuronShape.Height;
         }
 
     };
