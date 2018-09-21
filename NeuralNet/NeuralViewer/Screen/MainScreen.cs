@@ -35,7 +35,7 @@ namespace NeuralViewer.Screen
                 mainScreen.Children.Add(lscreen);
 
                 testLayers.Add(new ClassicLayer(lscreen, 8 + i * 20));
-                (testLayers[i] as ClassicLayer).OnRedrawing += RedrawConections;
+                testLayers[i].OnRedrawing += RedrawConections;
                 conections.Add(new LayerConections(8 + i * 20, 28 + i * 20));
             }
 
@@ -47,8 +47,9 @@ namespace NeuralViewer.Screen
             mainScreen.Children.Add(lss);
 
             testLayers.Add( new PixelLayer(lss, 88));
+            testLayers[4].OnRedrawing += RedrawConections;
 
-            
+
         }
 
         public void DrawConection(int back, int layer)

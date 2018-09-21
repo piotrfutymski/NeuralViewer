@@ -21,7 +21,7 @@ namespace NeuralViewer.Screen
             Random r = new Random((int)DateTime.Now.Ticks);
             representation = new Line();
             representation.StrokeThickness = 3;
-            Value = r.NextDouble();
+            Value = r.NextDouble()*2 -1;
         }
 
         public double Value

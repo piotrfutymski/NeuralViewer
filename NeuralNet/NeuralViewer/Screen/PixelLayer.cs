@@ -36,6 +36,7 @@ namespace NeuralViewer.Screen
                 else
                     neurons[i].ColorType = ScreenNeuron.ColorTypes.WhiteBlack;
             }
+            OnRedrawing?.Invoke(this, null);
         }
 
         private int CountNumberInLine()
