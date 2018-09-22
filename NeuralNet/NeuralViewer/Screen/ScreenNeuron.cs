@@ -62,8 +62,11 @@ namespace NeuralViewer.Screen
 
         public void SetSize(double x)
         {
-            NeuronShape.Height = x;
-            NeuronShape.Width = x;
+            if(x > 0)
+            {
+                NeuronShape.Height = x;
+                NeuronShape.Width = x;
+            }            
         }
         public double GetSize()
         {

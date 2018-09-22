@@ -14,16 +14,19 @@ namespace NeuralViewer.Screen
     class MainScreen
     {
         List<ScreenLayer> testLayers;
-        List<LayerConections> conections;
+        Conection[][] conections;
         protected Canvas mainScreen;
         double layerScreenHeight;
+
+        double[] markedNeurons;
 
         public MainScreen(Canvas screen)
         {
             mainScreen = screen;
 
             testLayers = new List<ScreenLayer>();
-            conections = new List<LayerConections>();
+            conections = new Conection[4][];
+            markedNeurons = new double[4];
             layerScreenHeight = mainScreen.Height / 5;
             for (int i = 0; i < 4; i++)
             {
@@ -34,9 +37,14 @@ namespace NeuralViewer.Screen
                 Canvas.SetTop(lscreen, i * lscreen.Height);
                 mainScreen.Children.Add(lscreen);
 
-                testLayers.Add(new ClassicLayer(lscreen, 8 + i * 20));
+                testLayers.Add(new ClassicLayer(lscreen, 8 + i * 200, i));
                 testLayers[i].OnRedrawing += RedrawConections;
-                conections.Add(new LayerConections(8 + i * 20, 28 + i * 20));
+                conections[i] = new Conection[208 + i * 200];
+                markedNeurons[i] = -1;
+                for (int j = 0; j < 208 + i*200; j++)
+                {
+                    conections[i][j] = new Conection();
+                }               
             }
 
             Canvas lss = new Canvas();
@@ -46,51 +54,87 @@ namespace NeuralViewer.Screen
             Canvas.SetTop(lss, 4 * lss.Height);
             mainScreen.Children.Add(lss);
 
-            testLayers.Add( new PixelLayer(lss, 88));
+            testLayers.Add( new PixelLayer(lss, 808, 4));
             testLayers[4].OnRedrawing += RedrawConections;
-
-
         }
 
-        public void DrawConection(int back, int layer)
+        private void DrawConection(int back, int front, int layer)
         {
-            ScreenNeuron nn = testLayers[layer].GetMarkedNeuron();
-            ScreenNeuron b = testLayers[layer + 1][back];
-            if (nn != null && testLayers[layer].IsNeuronOnScreen(nn))
-            {
-                
-                double x1 = Canvas.GetLeft(nn.Representation) + nn.GetSize()/2;
-                double y1 = Canvas.GetTop(nn.Representation) + layerScreenHeight*layer + nn.GetSize() / 2;
-                double x2 = Canvas.GetLeft(b.Representation) + b.GetSize()/2;
-                double y2 = Canvas.GetTop(b.Representation) + layerScreenHeight * (layer + 1) + b.GetSize() / 2;
+            ScreenNeuron frontNeuron = testLayers[layer][front];
+            ScreenNeuron backNeuron = testLayers[layer+1][back];
 
-                conections[layer].Conections[testLayers[layer].GetMarkedNeuronNum(), back].SetLinePosition(x1, x2, y1, y2);
-                mainScreen.Children.Add(conections[layer].Conections[testLayers[layer].GetMarkedNeuronNum(), back].Representation);
-            }
-            
+            double x1 = Canvas.GetLeft(frontNeuron.Representation) + frontNeuron.GetSize()/2;
+            double y1 = Canvas.GetTop(frontNeuron.Representation) + layerScreenHeight*layer + frontNeuron.GetSize() / 2;
+            double x2 = Canvas.GetLeft(backNeuron.Representation) + backNeuron.GetSize()/2;
+            double y2 = Canvas.GetTop(backNeuron.Representation) + layerScreenHeight * (layer + 1) + backNeuron.GetSize() / 2;
+
+            conections[layer][back].SetLinePosition(x1, x2, y1, y2);          
         }
 
-        public void RedrawConections(object s, System.EventArgs e)
+        private void RedrawConections(object s, System.EventArgs e)
         {
-            for (int i = 0; i < conections.Count; i++)
+            int i = (s as ScreenLayer).Nr;
+           
+            if (i < conections.Length)
             {
-                for (int j = 0; j < conections[i].Conections.Length; j++)
+                markedNeurons[i] = testLayers[i].GetMarkedNeuronNum();
+                RemoveFromLayer(i);
+                DrawLayerConection(i);
+                SetNewValues(i);
+                AddToLayer(i);
+                if(i > 0)
                 {
-                    int d = testLayers[i].Count();
-                    mainScreen.Children.Remove(conections[i].Conections[j%d, j/d].Representation);
+                    RemoveFromLayer(i - 1);
+                    DrawLayerConection(i - 1);
+                    SetNewValues(i - 1);
+                    AddToLayer(i - 1);
+                }          
+            }
+            else
+            {
+                RemoveFromLayer(i - 1);
+                DrawLayerConection(i - 1);
+                SetNewValues(i - 1);
+                AddToLayer(i - 1);
+            }
+        }
+
+        private void RemoveFromLayer(int l)
+        {
+            for (int i = 0; i < conections[l].Length; i++)
+            {
+                if (testLayers[l + 1].IsNeuronOnScreen(testLayers[l + 1][i]) == false || markedNeurons[l] == -1)
+                    mainScreen.Children.Remove(conections[l][i].Representation);
+            }
+        }
+
+        private void AddToLayer(int l)
+        {
+            for (int i = 0; i < conections[l].Length; i++)
+            {
+                if (testLayers[l + 1].IsNeuronOnScreen(testLayers[l + 1][i]) && mainScreen.Children.Contains(conections[l][i].Representation) == false && markedNeurons[l] != -1)
+                    mainScreen.Children.Add(conections[l][i].Representation);
+            }
+        }
+
+
+        private void DrawLayerConection(int l)
+        {
+            int n = testLayers[l].GetMarkedNeuronNum();
+            if(n!=-1)
+            {
+                for (int i = 0; i < conections[l].Length; i++)
+                {
+                    if (testLayers[l + 1].IsNeuronOnScreen(testLayers[l+1][i]))
+                        DrawConection(i, n, l);
                 }
             }
-
-            for (int i = 0; i < conections.Count; i++)
-            {
-                for (int j = 0; j < testLayers[i+1].Count(); j++)
-                {
-                    if(testLayers[i+1].IsNeuronOnScreen(testLayers[i+1][j]))
-                        DrawConection(j, i);                   
-                }
-            }
         }
 
+        private void SetNewValues(int l)
+        {
+
+        }
 
     }
 }

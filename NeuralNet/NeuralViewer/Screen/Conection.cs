@@ -45,10 +45,15 @@ namespace NeuralViewer.Screen
 
         public void SetLinePosition(double x1, double x2, double y1, double y2)
         {
-            representation.X1 = x1;
-            representation.X2 = x2;
-            representation.Y1 = y1;
-            representation.Y2 = y2;
+            try
+            {
+                representation.X1 = x1;
+                representation.X2 = x2;
+                representation.Y1 = y1;
+                representation.Y2 = y2;
+            }
+            catch
+            { }
         }
 
     }

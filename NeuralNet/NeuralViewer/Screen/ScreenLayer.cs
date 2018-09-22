@@ -20,6 +20,7 @@ namespace NeuralViewer.Screen
         protected Button optionButton;
 
         protected int markedNeuron;
+        public int Nr { get; private set; }
 
         protected double hSize;
 
@@ -65,7 +66,7 @@ namespace NeuralViewer.Screen
             return markedNeuron;
         }
 
-        public ScreenLayer(Canvas screen, int num)
+        public ScreenLayer(Canvas screen, int num, int nr)
         {
             layerScreen = screen;
             neurons = null;
@@ -73,6 +74,7 @@ namespace NeuralViewer.Screen
             neurons = new List<ScreenNeuron>();
             CreateTestNeurons(num);
             markedNeuron = -1;
+            Nr = nr;
 
             for (int i = 0; i < neurons.Count; i++)
             {

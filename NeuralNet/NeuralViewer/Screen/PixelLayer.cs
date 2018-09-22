@@ -147,7 +147,7 @@ namespace NeuralViewer.Screen
         //Test only
        
 
-        public PixelLayer(Canvas screen, int num) : base(screen, num)
+        public PixelLayer(Canvas screen, int num, int nr) : base(screen, num, nr)
         {          
 
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();

@@ -150,7 +150,7 @@ namespace NeuralViewer.Screen
 
         //Test only
 
-        public ClassicLayer(Canvas screen, int num) : base(screen, num)
+        public ClassicLayer(Canvas screen, int num, int nr) : base(screen, num, nr)
         {
             layerSettings = new Dictionary<NumberRepresentationSettings, double>();
             layerSettings.Add(NumberRepresentationSettings.FirstNeuronOnScreen, 0);
