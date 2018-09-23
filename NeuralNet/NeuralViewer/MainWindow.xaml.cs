@@ -26,7 +26,7 @@ namespace NeuralViewer
         public MainWindow()
         {
             InitializeComponent();
-            mScreenDisplayer = new Screen.MainScreen(n_screen);
+            mScreenDisplayer = new Screen.MainScreen(n_screen, w_screen);
         }
 
     }

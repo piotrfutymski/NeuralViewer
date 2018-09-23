@@ -14,20 +14,27 @@ namespace NeuralViewer.Screen
     class MainScreen
     {
         List<ScreenLayer> testLayers;
+        WeightScreen wScreen;
         Conection[][] conections;
         protected Canvas mainScreen;
         double layerScreenHeight;
 
         double[] markedNeurons;
 
-        public MainScreen(Canvas screen)
+        double[][,] conectionValues;
+
+        public MainScreen(Canvas screen, Canvas s)
         {
             mainScreen = screen;
 
             testLayers = new List<ScreenLayer>();
             conections = new Conection[4][];
             markedNeurons = new double[4];
+            conectionValues = new double[4][,];
             layerScreenHeight = mainScreen.Height / 5;
+
+            wScreen = new WeightScreen(s, 808);
+
             for (int i = 0; i < 4; i++)
             {
                 Canvas lscreen = new Canvas();
@@ -41,10 +48,17 @@ namespace NeuralViewer.Screen
                 testLayers[i].OnRedrawing += RedrawConections;
                 conections[i] = new Conection[208 + i * 200];
                 markedNeurons[i] = -1;
+                conectionValues[i] = new double[8 + i * 200 , 208 + i * 200];
                 for (int j = 0; j < 208 + i*200; j++)
                 {
                     conections[i][j] = new Conection();
-                }               
+                }
+                
+                if(i == 3)
+                {
+                    testLayers[i].OnMarked += LoadWeightScreen;
+                    testLayers[i].OnDismarked += DisloadWeightScreen;
+                }
             }
 
             Canvas lss = new Canvas();
@@ -134,6 +148,25 @@ namespace NeuralViewer.Screen
         private void SetNewValues(int l)
         {
 
+        }
+
+        private void LoadWeightScreen(object s, System.EventArgs e)
+        {
+            int n = (s as ScreenLayer).GetMarkedNeuronNum();
+            double[] weights = new double[808];
+            for (int i = 0; i < 808; i++)
+            {
+                weights[i] = conectionValues[3][n, i];
+            }
+
+            wScreen.SetValues(weights);
+
+        }
+
+        private void DisloadWeightScreen(object s, System.EventArgs e)
+        {
+            double[] weights = new double[808];
+            wScreen.SetValues(weights);
         }
 
     }

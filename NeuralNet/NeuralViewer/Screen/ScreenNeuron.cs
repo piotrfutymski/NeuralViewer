@@ -40,10 +40,14 @@ namespace NeuralViewer.Screen
                     Representation.Fill= new SolidColorBrush(Color.FromArgb(255, (byte)(num * 255), (byte)(num * 255), (byte)(num * 255)));
                 else if(colorType == ColorTypes.GreenRed)
                 {
-                    if(num <= 0)
-                        Representation.Fill = new SolidColorBrush(Color.FromArgb(255, 255, (byte)((1d+num) * 255), (byte)((1d + num) * 255) ));
+                    if (num <= 0 && num > -3)
+                        Representation.Fill = new SolidColorBrush(Color.FromArgb(255, 255, (byte)((3d + num) * 255), (byte)((3d + num) * 255)));
+                    else if (num < -3)
+                        Representation.Fill = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                    else if (num > 0 && num < 3)
+                        Representation.Fill = new SolidColorBrush(Color.FromArgb(255, (byte)((3d - num) * 255), 255, (byte)((3d - num) * 255)));
                     else
-                        Representation.Fill = new SolidColorBrush(Color.FromArgb(255, (byte)((1d - num) * 255), 255, (byte)((1d - num) * 255)));
+                        Representation.Fill = new SolidColorBrush(Color.FromArgb(255, 0, 255, 0));
                 }
             }
         }

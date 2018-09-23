@@ -12,5 +12,11 @@
             <Border BorderBrush="DarkBlue" BorderThickness="2" Height="600" Width="600" >
             </Border>
         </Canvas>
+
+        <Canvas x:Name="w_screen" Height="128" Width="128" Margin="723,508,272,37" 
+                Background="Black">
+            <Border BorderBrush="DarkBlue" BorderThickness="2" Height="128" Width="128" />
+        </Canvas>
+
     </Grid>
 </Window>

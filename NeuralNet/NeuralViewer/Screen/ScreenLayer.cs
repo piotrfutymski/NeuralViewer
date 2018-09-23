@@ -14,6 +14,10 @@ namespace NeuralViewer.Screen
     abstract class ScreenLayer
     {
         public EventHandler OnRedrawing;
+        public EventHandler OnMarked;
+        public EventHandler OnDismarked;
+
+
         protected Canvas layerScreen;
         protected List<ScreenNeuron> neurons;
         protected Dictionary<NumberRepresentationSettings, double> layerSettings;
@@ -84,7 +88,11 @@ namespace NeuralViewer.Screen
                     if (GetSetting(NumberRepresentationSettings.Markable) != 0)
                     {
                         if (GetMarkedNeuron() != null)
+                        {
                             GetMarkedNeuron().DismarkMe();
+                            OnDismarked?.Invoke(this, null);
+                        }
+                            
                         string x = (s as Shape).Name;
                         x = x.Remove(0,1);
                         if(markedNeuron == int.Parse(x))
@@ -93,6 +101,7 @@ namespace NeuralViewer.Screen
                         {
                             markedNeuron = int.Parse(x);
                             neurons[markedNeuron].MarkMe();
+                            OnMarked?.Invoke(this, null);
                         }
                         OnRedrawing?.Invoke(this, null);
                     }

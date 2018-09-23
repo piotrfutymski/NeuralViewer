@@ -65,6 +65,7 @@
     <Compile Include="Screen\ScreenNeuron.cs" />
     <Compile Include="Screen\PixelLayer.cs" />
     <Compile Include="Screen\MainScreen.cs" />
+    <Compile Include="Screen\WeightScreen.cs" />
     <Page Include="Screen\LayerOptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
