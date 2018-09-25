@@ -190,7 +190,7 @@ namespace NeuralNet
             }
             sr.Close();
 
-            return Train(s, sampList, DELTA, numToSum);
+            return TrainAsync(s, sampList, DELTA, numToSum);
         }
 
 
