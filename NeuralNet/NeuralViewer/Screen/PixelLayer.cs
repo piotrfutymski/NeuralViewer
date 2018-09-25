@@ -156,7 +156,7 @@ namespace NeuralViewer.Screen
             layerSettings.Add(NumberRepresentationSettings.Percent, 80);
             layerSettings.Add(NumberRepresentationSettings.Spaces, 0);
             layerSettings.Add(NumberRepresentationSettings.IsWhiteBlack, 1);
-            layerSettings.Add(NumberRepresentationSettings.RowNumber, 8);
+            layerSettings.Add(NumberRepresentationSettings.RowNumber, 28);
             layerSettings.Add(NumberRepresentationSettings.Markable, 1);
             hSize = GetSizeFormPercents(80);
 

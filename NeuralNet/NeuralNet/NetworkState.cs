@@ -20,6 +20,14 @@ namespace NeuralNet
             }
         }
 
+        public int LayerNumber
+        {
+            get
+            {
+                return mLayers.Count;
+            }
+        }
+
         public NetworkState(List<ConectionsInfo> c, Sample s)
         {
             mConections = new List<ConectionsInfo>();
@@ -95,9 +103,9 @@ namespace NeuralNet
             }           
         }
 
-        public double[] GetFinalLayer()
+        public double[] GetLayer(int n)
         {
-            return mLayers.Last();
+            return mLayers[n];
         }
 
         public void Write()

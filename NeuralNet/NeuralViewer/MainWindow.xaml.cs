@@ -23,21 +23,17 @@ namespace NeuralViewer
     /// </summary>
     public partial class MainWindow : Window
     {
-        Screen.MainScreen mScreenDisplayer;
-        Network network;
-        List<Sample> learnSamples;
-        List<Sample> testSamples;
-
+        AppLogic.Updater myUpdater;
+            
         public MainWindow()
         {
             InitializeComponent();
-            mScreenDisplayer = new Screen.MainScreen(n_screen, w_screen);
-            network = new Network(new int[] {784, 16, 16, 10}, @"..\..\..\..\Data\test.fnn");
-            learnSamples = AppLogic.SampleListProvider.GetSamplesFromIDX(@"..\..\..\..\Data\train-images.idx3-ubyte", @"..\..\..\..\Data\train-labels.idx1-ubyte", 59900);
-            testSamples = AppLogic.SampleListProvider.GetSamplesFromIDX(@"..\..\..\..\Data\t10k-images.idx3-ubyte", @"..\..\..\..\Data\t10k-labels.idx1-ubyte", 9900);
-
-            Task t = Task.Factory.StartNew(() => { network.Train(60, learnSamples); learnSamples = null; });
+            myUpdater = new AppLogic.Updater(n_screen, w_screen);
         }
 
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
     }
 }

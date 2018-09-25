@@ -55,6 +55,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppLogic\SampleListProvider.cs" />
+    <Compile Include="AppLogic\Updater.cs" />
     <Compile Include="Screen\Conection.cs" />
     <Compile Include="Screen\LayerOptionWindow.xaml.cs">
       <DependentUpon>LayerOptionWindow.xaml</DependentUpon>
