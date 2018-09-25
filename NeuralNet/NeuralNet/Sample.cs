@@ -7,7 +7,7 @@ using System.IO;
 
 namespace NeuralNet
 {
-    class Sample
+    public class Sample
     {
         public double[] Data { get; private set; }
         public double[] Predictions { get; private set; }

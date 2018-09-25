@@ -7,7 +7,7 @@ using System.IO;
 
 namespace NeuralNet
 {
-    class ConectionsInfo : ICloneable
+    public class ConectionsInfo : ICloneable
     {
         public double[,] WeightMatrix { get; private set; }
         public double[] BiasVector { get; private set; }
@@ -48,7 +48,7 @@ namespace NeuralNet
 
         public void LoadRandom()
         {
-            var randGenerator = new Random();
+            var randGenerator = new Random(DateTime.Now.Millisecond + DateTime.Now.Second);
 
             for (int i = 0; i < Fore; i++)
             {

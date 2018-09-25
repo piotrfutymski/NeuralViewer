@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNet
 {
-    class NetworkState
+    public class NetworkState
     {
         private List<ConectionsInfo> mConections;
         private List<double[]> mLayers;
@@ -38,6 +38,20 @@ namespace NeuralNet
             for (int i = 0; i < mConections.Count; i++)
             {
                 mLayers.Add(NeuronUtility.CountALayer(mLayers[i], mConections[i]));
+            }
+        }
+
+        public void Update(Sample s)
+        {
+            mLayers[0] = s.GetFirstLayer();
+            mSample = s;
+
+            if (mConections[0].Back != s.Data.Length)
+                throw new Exception("Bad Sample");
+
+            for (int i = 0; i < mConections.Count; i++)
+            {
+                mLayers[i+1] = NeuronUtility.CountALayer(mLayers[i], mConections[i]);
             }
         }
 

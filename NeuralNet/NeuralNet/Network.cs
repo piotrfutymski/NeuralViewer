@@ -2,19 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
 
 namespace NeuralNet
 {
-    class Network
+    public class Network
     {
         private List<ConectionsInfo> mConections;
         string fileName;
+        Random rand;
 
         public Network(string fN)
         {
             fileName = fN;
+            rand = new Random(DateTime.Now.Millisecond + DateTime.Now.Second);
             mConections = new List<ConectionsInfo>();
             try
             {
@@ -29,6 +32,7 @@ namespace NeuralNet
         public Network(int[] layers, string fN)
         {
             fileName = fN;
+            rand = new Random(DateTime.Now.Millisecond + DateTime.Now.Second);
             mConections = new List<ConectionsInfo>();
             for (int i = 0; i < layers.Length - 1; i++)
             {
@@ -86,20 +90,75 @@ namespace NeuralNet
             var actTime = new TimeSpan(0);
             int num = sampList.Count;
 
+            var ns = GetBeginingNS(sampList[0]);
+            Func<Object, List<ConectionsInfo>> act = CountMinusGradient;
+            var tasks = GetBeginingTasks(ns, sampList, numToSum);
+
             while (actTime < maxTime)
             {
                 var startTime = DateTime.Now;
-                var gradientList = CountMinusGradient(sampList, numToSum);
-                for (int i = 0; i < mConections.Count; i++)
+                
+                Task.Factory.ContinueWhenAny(tasks, (winner) =>
                 {
-                    gradientList[i] = gradientList[i] * DELTA;
-                    mConections[i] += gradientList[i];
-                }
-                how_many_times_upgraded++;
+                    var gradientList = winner.Result;
+                    for (int i = 0; i < mConections.Count; i++)
+                    {
+                        gradientList[i] = gradientList[i] * DELTA;
+                        mConections[i] += gradientList[i];
+                    }
+                    CountMinusGradientArgument a = new CountMinusGradientArgument();
+                    a.sampList = sampList;
+                    a.numToSum = numToSum;
+                    a.net = ns[Array.IndexOf(tasks, winner)];
+                    winner.Dispose();
+                    if (actTime < maxTime)
+                        winner = Task<List<ConectionsInfo>>.Factory.StartNew(act, a);
+
+                    how_many_times_upgraded += numToSum;
+                });
+                Task.Factory.ContinueWhenAll(tasks, (a) =>
+                {
+                    for (int i = 0; i < a.Length; i++)
+                    {
+                        a[i].Dispose();
+                    } }).Wait();
+
                 actTime += DateTime.Now - startTime;
             }
+
             Save();
             return how_many_times_upgraded;
+        }
+
+        NetworkState[] GetBeginingNS(Sample s)
+        {
+            int length = Environment.ProcessorCount;
+            if (length > 1) length--;
+            var res = new NetworkState[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                res[i] = new NetworkState(mConections, s);
+            }
+            return res;
+        }
+        Task<List<ConectionsInfo>>[] GetBeginingTasks(NetworkState[] ns, List<Sample> sampList, int numToSum)
+        {
+            int length = Environment.ProcessorCount;
+            if (length > 1) length--;
+            var res = new Task<List<ConectionsInfo>>[length];
+
+            Func<Object, List<ConectionsInfo>> act = CountMinusGradient;
+
+            for (int i = 0; i < length; i++)
+            {
+                CountMinusGradientArgument a = new CountMinusGradientArgument();
+                a.sampList = sampList;
+                a.numToSum = numToSum;
+                a.net = ns[i];
+                res[i] = Task<List<ConectionsInfo>>.Factory.StartNew(act, a);
+            }
+            return res;
         }
 
         public int Train(int s, string sampleFileName, double DELTA = 0.01, int numToSum = 25)
@@ -119,20 +178,21 @@ namespace NeuralNet
             return Train(s, sampList, DELTA, numToSum);
         }
 
-        private List<ConectionsInfo> CountMinusGradient(List<Sample> sampList, int numToSum)
+
+        private List<ConectionsInfo> CountMinusGradient(object aa)
         {
-            var rand = new Random();
-            int num = sampList.Count;
+            CountMinusGradientArgument a = aa as CountMinusGradientArgument;
+            int num = a.sampList.Count;
             var gradientList = new List<ConectionsInfo>();
             for (int i = 0; i < mConections.Count; i++)
             {
                 gradientList.Add(new ConectionsInfo(mConections[i].Fore, mConections[i].Back));
             }
-            for (int i = 0; i < numToSum; i++)
+            for (int i = 0; i < a.numToSum; i++)
             {
                 int n = rand.Next() % num;
-                var ns = new NetworkState(mConections, sampList[n]);
-                var mg = ns.GetMinusGradient();
+                a.net.Update(a.sampList[n]);
+                var mg = a.net.GetMinusGradient();
                 for (int j = 0; j < mConections.Count; j++)
                 {
                     gradientList[j] += mg[j];
@@ -170,5 +230,12 @@ namespace NeuralNet
             }
             br.Close();
         }
+    }
+
+    class CountMinusGradientArgument
+    {
+        public List<Sample> sampList;
+        public int numToSum;
+        public NetworkState net;
     }
 }

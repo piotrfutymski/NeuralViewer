@@ -54,6 +54,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppLogic\SampleListProvider.cs" />
     <Compile Include="Screen\Conection.cs" />
     <Compile Include="Screen\LayerOptionWindow.xaml.cs">
       <DependentUpon>LayerOptionWindow.xaml</DependentUpon>
@@ -108,6 +109,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NeuralNet\NeuralNet.csproj">
+      <Project>{34acd09a-a430-40da-97c7-ab22ce389868}</Project>
+      <Name>NeuralNet</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
