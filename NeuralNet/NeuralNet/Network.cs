@@ -90,9 +90,7 @@ namespace NeuralNet
             var actTime = new TimeSpan(0);
             int num = sampList.Count;
 
-            var ns = GetBeginingNS(sampList[0]);
-            Func<Object, List<ConectionsInfo>> act = CountMinusGradient;
-            var tasks = GetBeginingTasks(ns, sampList, numToSum);
+            var tasks = GetBeginingTasks(sampList, numToSum);
 
             while (actTime < maxTime)
             {
@@ -106,13 +104,10 @@ namespace NeuralNet
                         gradientList[i] = gradientList[i] * DELTA;
                         mConections[i] += gradientList[i];
                     }
-                    CountMinusGradientArgument a = new CountMinusGradientArgument();
-                    a.sampList = sampList;
-                    a.numToSum = numToSum;
-                    a.net = ns[Array.IndexOf(tasks, winner)];
+
                     winner.Dispose();
                     if (actTime < maxTime)
-                        winner = Task<List<ConectionsInfo>>.Factory.StartNew(act, a);
+                        winner = Task<List<ConectionsInfo>>.Factory.StartNew(() => { return CountMinusGradient(sampList, numToSum, new NetworkState(mConections, sampList[0])); });
 
                     how_many_times_upgraded += numToSum;
                 });
@@ -130,33 +125,15 @@ namespace NeuralNet
             return how_many_times_upgraded;
         }
 
-        NetworkState[] GetBeginingNS(Sample s)
-        {
-            int length = Environment.ProcessorCount;
-            if (length > 1) length--;
-            var res = new NetworkState[length];
-
-            for (int i = 0; i < length; i++)
-            {
-                res[i] = new NetworkState(mConections, s);
-            }
-            return res;
-        }
-        Task<List<ConectionsInfo>>[] GetBeginingTasks(NetworkState[] ns, List<Sample> sampList, int numToSum)
+        Task<List<ConectionsInfo>>[] GetBeginingTasks(List<Sample> sampList, int numToSum)
         {
             int length = Environment.ProcessorCount;
             if (length > 1) length--;
             var res = new Task<List<ConectionsInfo>>[length];
 
-            Func<Object, List<ConectionsInfo>> act = CountMinusGradient;
-
             for (int i = 0; i < length; i++)
             {
-                CountMinusGradientArgument a = new CountMinusGradientArgument();
-                a.sampList = sampList;
-                a.numToSum = numToSum;
-                a.net = ns[i];
-                res[i] = Task<List<ConectionsInfo>>.Factory.StartNew(act, a);
+                res[i] = Task<List<ConectionsInfo>>.Factory.StartNew(()=> { return CountMinusGradient(sampList, numToSum, new NetworkState(mConections, sampList[0])); });
             }
             return res;
         }
@@ -179,20 +156,19 @@ namespace NeuralNet
         }
 
 
-        private List<ConectionsInfo> CountMinusGradient(object aa)
+        private List<ConectionsInfo> CountMinusGradient(  List<Sample> sampList, int numToSum, NetworkState net)
         {
-            CountMinusGradientArgument a = aa as CountMinusGradientArgument;
-            int num = a.sampList.Count;
+            int num = sampList.Count;
             var gradientList = new List<ConectionsInfo>();
             for (int i = 0; i < mConections.Count; i++)
             {
                 gradientList.Add(new ConectionsInfo(mConections[i].Fore, mConections[i].Back));
             }
-            for (int i = 0; i < a.numToSum; i++)
+            for (int i = 0; i < numToSum; i++)
             {
                 int n = rand.Next() % num;
-                a.net.Update(a.sampList[n]);
-                var mg = a.net.GetMinusGradient();
+                net.Update(sampList[n]);
+                var mg = net.GetMinusGradient();
                 for (int j = 0; j < mConections.Count; j++)
                 {
                     gradientList[j] += mg[j];
@@ -232,10 +208,4 @@ namespace NeuralNet
         }
     }
 
-    class CountMinusGradientArgument
-    {
-        public List<Sample> sampList;
-        public int numToSum;
-        public NetworkState net;
-    }
 }
