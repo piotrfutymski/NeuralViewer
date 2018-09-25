@@ -21,17 +21,17 @@ namespace NeuralViewer.AppLogic
 
         public Updater(Canvas n_screen, Canvas w_screen)
         {
-            network = new Network(new int[] {784,32,16,10 }, @"..\..\..\..\Data\test4.fnn");
+            network = new Network(new int[] {784, 10 }, @"..\..\..\..\Data\test5.fnn");
             learnSamples = AppLogic.SampleListProvider.GetSamplesFromIDX(@"..\..\..\..\Data\train-images.idx3-ubyte", @"..\..\..\..\Data\train-labels.idx1-ubyte", 59900);
             testSamples = AppLogic.SampleListProvider.GetSamplesFromIDX(@"..\..\..\..\Data\t10k-images.idx3-ubyte", @"..\..\..\..\Data\t10k-labels.idx1-ubyte", 9900);
             mScreenDisplayer = new Screen.MainScreen(n_screen, w_screen, network.GetNetworkState(testSamples[0]));
 
             System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += dispatcherTimer_Tick;
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,800);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,990);
             dispatcherTimer.Start();
 
-            Task.Factory.StartNew(() => { network.Train(1000, learnSamples); });
+            Task.Factory.StartNew(() => { network.TrainAsync(1000, learnSamples); });
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)

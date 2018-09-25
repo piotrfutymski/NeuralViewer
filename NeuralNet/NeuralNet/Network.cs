@@ -128,42 +128,34 @@ namespace NeuralNet
         }
 
 
-        public int TrainAsync(int s, List<Sample> sampList, double DELTA = 0.1, int numToSum = 25)
+        public int TrainAsync(int s, List<Sample> sampList, double DELTA = 0.02, int numToSum = 25)
         {
             int how_many_times_upgraded = 0;
 
             var maxTime = new TimeSpan(0, 0, s);
             var actTime = new TimeSpan(0);
             int num = sampList.Count;
-
-            var tasks = GetBeginingTasks(sampList, numToSum);
-
+     
             while (actTime < maxTime)
             {
                 var startTime = DateTime.Now;
-                
-                Task.Factory.ContinueWhenAny(tasks, (winner) =>
+
+                var tasks = GetBeginingTasks(sampList, numToSum);
+
+                Task.Factory.ContinueWhenAll(tasks, (winners) =>
                 {
-                    var gradientList = winner.Result;
-                    for (int i = 0; i < mConections.Count; i++)
+                    for (int i = 0; i < winners.Count(); i++)
                     {
-                        gradientList[i] = gradientList[i] * DELTA;
-                        mConections[i] += gradientList[i];
+                        var gradientList = winners[i].Result;
+                        for (int j = 0; j < mConections.Count; j++)
+                        {
+                            gradientList[j] = gradientList[j] * DELTA;
+                            mConections[j] += gradientList[j];
+                        }
                     }
-
-                    winner.Dispose();
-                    if (actTime < maxTime)
-                        winner = Task<List<ConectionsInfo>>.Factory.StartNew(() => { return CountMinusGradient(sampList, numToSum, new NetworkState(mConections, sampList[0])); });
-
+                    
                     how_many_times_upgraded += numToSum;
-                });
-                Task.Factory.ContinueWhenAll(tasks, (a) =>
-                {
-                    for (int i = 0; i < a.Length; i++)
-                    {
-                        a[i].Dispose();
-                    } }).Wait();
-
+                }).Wait();               
                 actTime += DateTime.Now - startTime;
             }
 
@@ -179,7 +171,7 @@ namespace NeuralNet
 
             for (int i = 0; i < length; i++)
             {
-                res[i] = Task<List<ConectionsInfo>>.Factory.StartNew(()=> { return CountMinusGradient(sampList, numToSum, new NetworkState(mConections, sampList[0])); });
+                res[i] = Task<List<ConectionsInfo>>.Factory.StartNew(()=> { return CountMinusGradient(sampList, numToSum); });
             }
             return res;
         }
@@ -201,27 +193,6 @@ namespace NeuralNet
             return Train(s, sampList, DELTA, numToSum);
         }
 
-
-        private List<ConectionsInfo> CountMinusGradient(  List<Sample> sampList, int numToSum, NetworkState net)
-        {
-            int num = sampList.Count;
-            var gradientList = new List<ConectionsInfo>();
-            for (int i = 0; i < mConections.Count; i++)
-            {
-                gradientList.Add(new ConectionsInfo(mConections[i].Fore, mConections[i].Back));
-            }
-            for (int i = 0; i < numToSum; i++)
-            {
-                int n = rand.Next() % num;
-                net.Update(sampList[n]);
-                var mg = net.GetMinusGradient();
-                for (int j = 0; j < mConections.Count; j++)
-                {
-                    gradientList[j] += mg[j];
-                }
-            }
-            return gradientList;
-        }
 
         private void Save()
         {

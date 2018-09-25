@@ -22,6 +22,8 @@ namespace NeuralViewer.Screen
         double[] markedNeurons;
         double[][,] conectionValues;
 
+        int lastmarked = -1;
+
         public MainScreen(Canvas screen, Canvas s, NetworkState state)
         {
             mainScreen = screen;
@@ -98,6 +100,17 @@ namespace NeuralViewer.Screen
                 }
             }
 
+            if(lastmarked != -1)
+            {
+                double[] weights = new double[conections[0].Length];
+                for (int i = 0; i < conections[0].Length; i++)
+                {
+
+                    weights[i] = conectionValues[0][lastmarked, i];
+                }
+                wScreen.SetValues(weights);
+            }
+        
         }
 
         private void DrawConection(int back, int front, int layer)
@@ -187,11 +200,11 @@ namespace NeuralViewer.Screen
 
         private void LoadWeightScreen(object s, System.EventArgs e)
         {
-            int n = (s as ScreenLayer).GetMarkedNeuronNum();
+            lastmarked = (s as ScreenLayer).GetMarkedNeuronNum();
             double[] weights = new double[conections[0].Length];
             for (int i = 0; i < conections[0].Length; i++)
             {
-                weights[i] = conectionValues[0][n, i];
+                weights[i] = conectionValues[0][lastmarked, i];
             }
 
             wScreen.SetValues(weights);

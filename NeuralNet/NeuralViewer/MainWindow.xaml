@@ -13,9 +13,9 @@
             </Border>
         </Canvas>
 
-        <Canvas x:Name="w_screen" Height="128" Width="128" Margin="723,508,272,37" 
+        <Canvas x:Name="w_screen" Height="256" Width="256" Margin="723,308,272,37" 
                 Background="Black">
-            <Border BorderBrush="DarkBlue" BorderThickness="2" Height="128" Width="128" />
+            <Border BorderBrush="DarkBlue" BorderThickness="2" Height="256" Width="256" />
         </Canvas>
 
     </Grid>

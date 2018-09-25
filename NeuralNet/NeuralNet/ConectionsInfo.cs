@@ -54,9 +54,9 @@ namespace NeuralNet
             {
                 for (int j = 0; j < Back; j++)
                 {
-                    WeightMatrix[i, j] = randGenerator.NextDouble() * 2 - 1;
+                    WeightMatrix[i, j] = randGenerator.NextDouble() -0.5;
                 }
-                BiasVector[i] = randGenerator.NextDouble() * 2 - 1;
+                BiasVector[i] = randGenerator.NextDouble() -0.5;
             }
         }
 
